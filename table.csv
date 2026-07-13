@@ -72,14 +72,13 @@ aes-192,                        key,            0xa1,           draft,      192-
 aes-256,                        key,            0xa2,           draft,      256-bit AES symmetric key
 chacha-128,                     key,            0xa3,           draft,      128-bit ChaCha symmetric key
 chacha-256,                     key,            0xa4,           draft,      256-bit ChaCha symmetric key
-chacha20-poly1305,              multikey,       0xa5,           draft,      ChaCha20_Poly1305 encryption scheme
 bitcoin-block,                  ipld,           0xb0,           permanent,  Bitcoin Block
 bitcoin-tx,                     ipld,           0xb1,           permanent,  Bitcoin Tx
 bitcoin-witness-commitment,     ipld,           0xb2,           permanent,  Bitcoin Witness Commitment
 zcash-block,                    ipld,           0xc0,           permanent,  Zcash Block
 zcash-tx,                       ipld,           0xc1,           permanent,  Zcash Tx
-caip-50,                        multiformat,    0xca,           draft,      CAIP-50 multi-chain account id
-streamid,                       namespace,      0xce,           draft,      Ceramic Stream Id
+caip-50,                        multiformat,    0xca,           draft,      CAIP-50 multi-chain account ID
+streamid,                       namespace,      0xce,           draft,      Ceramic Stream ID
 stellar-block,                  ipld,           0xd0,           draft,      Stellar Block
 stellar-tx,                     ipld,           0xd1,           draft,      Stellar Tx
 md4,                            multihash,      0xd4,           draft,
@@ -116,6 +115,7 @@ udt,                            multiaddr,      0x012d,         draft,
 utp,                            multiaddr,      0x012e,         draft,
 crc32,                          hash,           0x0132,         draft,      CRC-32 non-cryptographic hash algorithm (IEEE 802.3)
 crc64-ecma,                     hash,           0x0164,         draft,      CRC-64 non-cryptographic hash algorithm (ECMA-182 - Annex B)
+crc64-nvme,                     hash,           0x0165,         draft,      CRC-64 checksum based on the NVME polynomial as specified in the NVM Express® NVM Command Set Specification
 unix,                           multiaddr,      0x0190,         permanent,
 thread,                         multiaddr,      0x0196,         draft,      Textile Thread
 p2p,                            multiaddr,      0x01a5,         permanent,  libp2p
@@ -136,10 +136,12 @@ ws,                             multiaddr,      0x01dd,         permanent,
 wss,                            multiaddr,      0x01de,         permanent,
 p2p-websocket-star,             multiaddr,      0x01df,         permanent,
 http,                           multiaddr,      0x01e0,         draft,
+http-path,                      multiaddr,      0x01e1,         draft,      Percent-encoded path to an HTTP resource
 swhid-1-snp,                    ipld,           0x01f0,         draft,      SoftWare Heritage persistent IDentifier version 1 snapshot
 json,                           ipld,           0x0200,         permanent,  JSON (UTF-8-encoded)
 messagepack,                    serialization,  0x0201,         draft,      MessagePack
 car,                            serialization,  0x0202,         draft,      Content Addressable aRchive (CAR)
+x509-certificate,               serialization,  0x0210,         draft,      DER-encoded X.509 (PKIX) certificate per RFC 5280; single certificate only (no chain); raw DER bytes (not PEM)
 ipns-record,                    serialization,  0x0300,         permanent,  Signed IPNS Record
 libp2p-peer-record,             libp2p,         0x0301,         permanent,  libp2p peer record type
 libp2p-relay-rsvp,              libp2p,         0x0302,         permanent,  libp2p relay reservation voucher
@@ -149,7 +151,9 @@ car-multihash-index-sorted,     serialization,  0x0401,         draft,      CARv
 transport-bitswap,              transport,      0x0900,         draft,      Bitswap datatransfer
 transport-graphsync-filecoinv1, transport,      0x0910,         draft,      Filecoin graphsync datatransfer
 transport-ipfs-gateway-http,    transport,      0x0920,         draft,      HTTP IPFS Gateway trustless datatransfer
+transport-filecoin-piece-http,  transport,      0x0930,         draft,      HTTP piece retrieval from Filecoin storage provider; https://github.com/filecoin-project/FIPs/blob/master/FRCs/frc-0066.md
 multidid,                       multiformat,    0x0d1d,         draft,      Compact encoding for Decentralized Identifers
+fr32-sha256-trunc254-padbintree,multihash,      0x1011,         draft,      A balanced binary tree hash used in Filecoin Piece Commitments as described in FRC-0069
 sha2-256-trunc254-padded,       multihash,      0x1012,         permanent,  SHA2-256 with the two most significant bits from the last byte zeroed (as via a mask with 0b00111111) - used for proving trees as in Filecoin
 sha2-224,                       multihash,      0x1013,         permanent,  aka SHA-224; as specified by FIPS 180-4.
 sha2-512-224,                   multihash,      0x1014,         permanent,  aka SHA-512/224; as specified by FIPS 180-4.
@@ -171,8 +175,58 @@ vlad,                           vlad,           0x1207,         draft,      Veri
 provenance-log,                 serialization,  0x1208,         draft,      Verifiable and permissioned append-only log
 provenance-log-entry,           serialization,  0x1209,         draft,      Verifiable and permissioned append-only log entry
 provenance-log-script,          serialization,  0x120a,         draft,      Verifiable and permissioned append-only log script
+mlkem-768-pub,                  key,            0x120c,         draft,      ML-KEM 768 public key; as specified by FIPS 203
+mlkem-1024-pub,                 key,            0x120d,         draft,      ML-KEM 1024 public key; as specified by FIPS 203
+slh-dsa-sha2-128f-pub,          key,            0x120e,         draft,      SLH-DSA SHA2-128f public key; FIPS 205
+slh-dsa-sha2-128s-pub,          key,            0x1214,         draft,      SLH-DSA SHA2-128s public key; FIPS 205
+slh-dsa-sha2-192f-pub,          key,            0x1215,         draft,      SLH-DSA SHA2-192f public key; FIPS 205
+slh-dsa-sha2-192s-pub,          key,            0x1216,         draft,      SLH-DSA SHA2-192s public key; FIPS 205
+slh-dsa-sha2-256f-pub,          key,            0x1217,         draft,      SLH-DSA SHA2-256f public key; FIPS 205
+slh-dsa-sha2-256s-pub,          key,            0x1218,         draft,      SLH-DSA SHA2-256s public key; FIPS 205
+slh-dsa-shake128f-pub,          key,            0x1219,         draft,      SLH-DSA SHAKE128f public key; FIPS 205
+slh-dsa-shake128s-pub,          key,            0x121a,         draft,      SLH-DSA SHAKE128s public key; FIPS 205
+slh-dsa-shake192f-pub,          key,            0x121b,         draft,      SLH-DSA SHAKE192f public key; FIPS 205
+slh-dsa-shake192s-pub,          key,            0x121c,         draft,      SLH-DSA SHAKE192s public key; FIPS 205
+slh-dsa-shake256f-pub,          key,            0x121d,         draft,      SLH-DSA SHAKE256f public key; FIPS 205
+slh-dsa-shake256s-pub,          key,            0x121e,         draft,      SLH-DSA SHAKE256s public key; FIPS 205
+sntrup761-pub,                  key,            0x121f,         draft,      sntrup761 public key
+mceliece348864-pub,             key,            0x1220,         draft,      Classic McEliece 348864 public key
+mceliece460896-pub,             key,            0x1221,         draft,      Classic McEliece 460896 public key
+rsa-2048-pub,                   key,            0x1222,         draft,      RSA 2048-bit public key
+rsa-3072-pub,                   key,            0x1223,         draft,      RSA 3072-bit public key
+rsa-4096-pub,                   key,            0x1224,         draft,      RSA 4096-bit public key
+mayo-1-pub,                     key,            0x1225,         draft,      MAYO level 1 public key
+mayo-2-pub,                     key,            0x1226,         draft,      MAYO level 2 public key
+mayo-3-pub,                     key,            0x123d,         draft,      MAYO level 3 public key
+mayo-5-pub,                     key,            0x123e,         draft,      MAYO level 5 public key
+sntrup857-pub,                  key,            0x1227,         draft,      sntrup857 public key
+sntrup953-pub,                  key,            0x1228,         draft,      sntrup953 public key
+sntrup1013-pub,                 key,            0x1229,         draft,      sntrup1013 public key
+sntrup1277-pub,                 key,            0x122a,         draft,      sntrup1277 public key
+x25519-sntrup761-pub,           key,            0x1230,         draft,      X25519-sntrup761 hybrid KEM public key
+x25519-frodokem640aes-pub,      key,            0x1243,         draft,      X25519-FrodoKEM-640-AES hybrid KEM public key
+x25519-frodokem640shake-pub,    key,            0x1244,         draft,      X25519-FrodoKEM-640-SHAKE hybrid KEM public key
+x25519-mceliece348864-pub,      key,            0x1245,         draft,      X25519-Classic-McEliece-348864 hybrid KEM public key
+bls12381-g1-mldsa65-pub,        key,            0x1246,         draft,      BLS12-381-G1-ML-DSA-65 hybrid signing public key
+bls12381-g1-fndsa512-pub,       key,            0x1247,         draft,      BLS12-381-G1-FN-DSA-512 hybrid signing public key
+bls12381-g1-mayo1-pub,          key,            0x1248,         draft,      BLS12-381-G1-MAYO-1 hybrid signing public key
+bls12381-g1-mayo2-pub,          key,            0x1249,         draft,      BLS12-381-G1-MAYO-2 hybrid signing public key
+x25519-mlkem768-pub,            key,            0x1231,         draft,      X25519-ML-KEM-768 hybrid KEM public key
+ed25519-mayo2-pub,              key,            0x1232,         draft,      Ed25519-MAYO2 hybrid signing public key
+ed25519-mldsa65-pub,            key,            0x123f,         draft,      Ed25519-ML-DSA-65 hybrid signing public key
+ed25519-fndsa512-pub,           key,            0x1241,         draft,      Ed25519-FN-DSA-512 hybrid signing public key
+frodo-kem-640-aes-pub,          key,            0x1234,         draft,      FrodoKEM-640-AES public key
+frodo-kem-976-aes-pub,          key,            0x1235,         draft,      FrodoKEM-976-AES public key
+frodo-kem-1344-aes-pub,         key,            0x1236,         draft,      FrodoKEM-1344-AES public key
+frodo-kem-640-shake-pub,        key,            0x1237,         draft,      FrodoKEM-640-SHAKE public key
+frodo-kem-976-shake-pub,        key,            0x1238,         draft,      FrodoKEM-976-SHAKE public key
+frodo-kem-1344-shake-pub,       key,            0x123c,         draft,      FrodoKEM-1344-SHAKE public key
+ml-dsa-65-pub,                  key,            0x1212,         draft,      ML-DSA (Dilithium) 65 public key; as specified by FIPS 204
+ml-dsa-87-pub,                  key,            0x1213,         draft,      ML-DSA (Dilithium) 87 public key; as specified by FIPS 204
+fn-dsa-512-pub,                 key,            0x1210,         draft,      FN-DSA (Falcon) 512 public key; as specified by FIPS 206 (draft)
+fn-dsa-1024-pub,                key,            0x1211,         draft,      FN-DSA (Falcon) 1024 public key; as specified by FIPS 206 (draft)
 multisig,                       multiformat,    0x1239,         draft,      Digital signature multiformat
-multikey,                       multiformat,    0x123a,         draft,      Encryption key multiformat 
+multikey,                       multiformat,    0x123a,         draft,      Encryption key multiformat
 nonce,                          nonce,          0x123b,         draft,      Nonce random value
 ed25519-priv,                   key,            0x1300,         draft,      Ed25519 private key
 secp256k1-priv,                 key,            0x1301,         draft,      Secp256k1 private key
@@ -189,16 +243,83 @@ bls12_381-g1-pub-share,         key,            0x130c,         draft,      BLS1
 bls12_381-g2-pub-share,         key,            0x130d,         draft,      BLS12-381 G2 public key share
 bls12_381-g1-priv-share,        key,            0x130e,         draft,      BLS12-381 G1 private key share
 bls12_381-g2-priv-share,        key,            0x130f,         draft,      BLS12-381 G2 private key share
-lamport-pub,                    key,            0x1a14,         draft,      Lamport public key
-lamport-priv,                   key,            0x1a24,         draft,      Lamport private key
-lamport-priv-share,             key,            0x1a34,         draft,      Lamport private key share split with Shamir gf256
-lamport-sig,                    multisig,       0x1a44,         draft,      Lamport signature
-lamport-sig-share,              multisig,       0x1a54,         draft,      Lamport signature share split with Shamir gf256
+sm2-priv,                       key,            0x1310,         draft,      SM2 private key
+ed448-priv,                     key,            0x1311,         draft,      Ed448 private key
+x448-priv,                      key,            0x1312,         draft,      X448 private key
+mlkem-768-priv,                 key,            0x1314,         draft,      ML-KEM 768 public key; as specified by FIPS 203
+mlkem-1024-priv,                key,            0x1315,         draft,      ML-KEM 1024 public key; as specified by FIPS 203
+jwk_jcs-priv,                   key,            0x1316,         draft,      JSON object containing only the required members of a JWK (RFC 7518 and RFC 7517) representing the private key. Serialisation based on JCS (RFC 8785)
+slh-dsa-sha2-128f-priv,         key,            0x1317,         draft,      SLH-DSA SHA2-128f private key; FIPS 205
+slh-dsa-sha2-128s-priv,         key,            0x131d,         draft,      SLH-DSA SHA2-128s private key; FIPS 205
+slh-dsa-sha2-192f-priv,         key,            0x131e,         draft,      SLH-DSA SHA2-192f private key; FIPS 205
+slh-dsa-sha2-192s-priv,         key,            0x131f,         draft,      SLH-DSA SHA2-192s private key; FIPS 205
+slh-dsa-sha2-256f-priv,         key,            0x1320,         draft,      SLH-DSA SHA2-256f private key; FIPS 205
+slh-dsa-sha2-256s-priv,         key,            0x1321,         draft,      SLH-DSA SHA2-256s private key; FIPS 205
+slh-dsa-shake128f-priv,         key,            0x1322,         draft,      SLH-DSA SHAKE128f private key; FIPS 205
+slh-dsa-shake128s-priv,         key,            0x1323,         draft,      SLH-DSA SHAKE128s private key; FIPS 205
+slh-dsa-shake192f-priv,         key,            0x1324,         draft,      SLH-DSA SHAKE192f private key; FIPS 205
+slh-dsa-shake192s-priv,         key,            0x1325,         draft,      SLH-DSA SHAKE192s private key; FIPS 205
+slh-dsa-shake256f-priv,         key,            0x1326,         draft,      SLH-DSA SHAKE256f private key; FIPS 205
+slh-dsa-shake256s-priv,         key,            0x1327,         draft,      SLH-DSA SHAKE256s private key; FIPS 205
+sntrup761-priv,                 key,            0x1328,         draft,      sntrup761 private key
+mceliece348864-priv,            key,            0x1329,         draft,      Classic McEliece 348864 private key
+mceliece460896-priv,            key,            0x132a,         draft,      Classic McEliece 460896 private key
+rsa-2048-priv,                  key,            0x132b,         draft,      RSA 2048-bit private key
+rsa-3072-priv,                  key,            0x132c,         draft,      RSA 3072-bit private key
+rsa-4096-priv,                  key,            0x132d,         draft,      RSA 4096-bit private key
+mayo-1-priv,                    key,            0x132e,         draft,      MAYO level 1 private key
+mayo-2-priv,                    key,            0x132f,         draft,      MAYO level 2 private key
+mayo-3-priv,                    key,            0x134a,         draft,      MAYO level 3 private key
+mayo-5-priv,                    key,            0x134b,         draft,      MAYO level 5 private key
+sntrup857-priv,                 key,            0x1330,         draft,      sntrup857 private key
+sntrup953-priv,                 key,            0x1331,         draft,      sntrup953 private key
+sntrup1013-priv,                key,            0x1332,         draft,      sntrup1013 private key
+sntrup1277-priv,                key,            0x1333,         draft,      sntrup1277 private key
+x25519-sntrup761-priv,          key,            0x1340,         draft,      X25519-sntrup761 hybrid KEM private key
+x25519-frodokem640aes-priv,     key,            0x1350,         draft,      X25519-FrodoKEM-640-AES hybrid KEM private key
+x25519-frodokem640shake-priv,   key,            0x1351,         draft,      X25519-FrodoKEM-640-SHAKE hybrid KEM private key
+x25519-mceliece348864-priv,     key,            0x1352,         draft,      X25519-Classic-McEliece-348864 hybrid KEM private key
+bls12381-g1-mldsa65-priv,       key,            0x1353,         draft,      BLS12-381-G1-ML-DSA-65 hybrid signing private key
+bls12381-g1-fndsa512-priv,      key,            0x1354,         draft,      BLS12-381-G1-FN-DSA-512 hybrid signing private key
+bls12381-g1-mayo1-priv,         key,            0x1355,         draft,      BLS12-381-G1-MAYO-1 hybrid signing private key
+bls12381-g1-mayo2-priv,         key,            0x1356,         draft,      BLS12-381-G1-MAYO-2 hybrid signing private key
+x25519-mlkem768-priv,           key,            0x1341,         draft,      X25519-ML-KEM-768 hybrid KEM private key
+ed25519-mayo2-priv,             key,            0x1342,         draft,      Ed25519-MAYO2 hybrid signing private key
+ed25519-mldsa65-priv,           key,            0x134c,         draft,      Ed25519-ML-DSA-65 hybrid signing private key
+ed25519-fndsa512-priv,          key,            0x134e,         draft,      Ed25519-FN-DSA-512 hybrid signing private key
+frodo-kem-640-aes-priv,         key,            0x1344,         draft,      FrodoKEM-640-AES private key
+frodo-kem-976-aes-priv,         key,            0x1345,         draft,      FrodoKEM-976-AES private key
+frodo-kem-1344-aes-priv,        key,            0x1346,         draft,      FrodoKEM-1344-AES private key
+frodo-kem-640-shake-priv,       key,            0x1347,         draft,      FrodoKEM-640-SHAKE private key
+frodo-kem-976-shake-priv,       key,            0x1348,         draft,      FrodoKEM-976-SHAKE private key
+frodo-kem-1344-shake-priv,      key,            0x1349,         draft,      FrodoKEM-1344-SHAKE private key
+ml-dsa-65-priv,                 key,            0x131b,         draft,      ML-DSA (Dilithium) 65 private key; as specified by FIPS 204
+ml-dsa-87-priv,                 key,            0x131c,         draft,      ML-DSA (Dilithium) 87 private key; as specified by FIPS 204
+fn-dsa-512-priv,                key,            0x1319,         draft,      FN-DSA (Falcon) 512 private key; as specified by FIPS 206 (draft)
+fn-dsa-1024-priv,               key,            0x131a,         draft,      FN-DSA (Falcon) 1024 private key; as specified by FIPS 206 (draft)
+lamport-sha3-512-pub,           key,            0x1a14,         draft,      Lamport public key based on SHA3-512
+lamport-sha3-384-pub,           key,            0x1a15,         draft,      Lamport public key based on SHA3-384
+lamport-sha3-256-pub,           key,            0x1a16,         draft,      Lamport public key based on SHA3-256
+lamport-sha3-512-priv,          key,            0x1a24,         draft,      Lamport private key based on SHA3-512
+lamport-sha3-384-priv,          key,            0x1a25,         draft,      Lamport private key based on SHA3-384
+lamport-sha3-256-priv,          key,            0x1a26,         draft,      Lamport private key based on SHA3-256
+lamport-sha3-512-priv-share,    key,            0x1a34,         draft,      Lamport private key share based on SHA3-512 and split with Shamir gf256
+lamport-sha3-384-priv-share,    key,            0x1a35,         draft,      Lamport private key share based on SHA3-384 and split with Shamir gf256
+lamport-sha3-256-priv-share,    key,            0x1a36,         draft,      Lamport private key share based on SHA3-256 and split with Shamir gf256
+lamport-sha3-512-sig,           multisig,       0x1a44,         draft,      Lamport signature based on SHA3-512
+lamport-sha3-384-sig,           multisig,       0x1a45,         draft,      Lamport signature based on SHA3-384
+lamport-sha3-256-sig,           multisig,       0x1a46,         draft,      Lamport signature based on SHA3-256
+lamport-sha3-512-sig-share,     multisig,       0x1a54,         draft,      Lamport signature share based on SHA3-512 and split with Shamir gf256
+lamport-sha3-384-sig-share,     multisig,       0x1a55,         draft,      Lamport signature share based on SHA3-384 and split with Shamir gf256
+lamport-sha3-256-sig-share,     multisig,       0x1a56,         draft,      Lamport signature share based on SHA3-256 and split with Shamir gf256
 kangarootwelve,                 multihash,      0x1d01,         draft,      KangarooTwelve is an extendable-output hash function based on Keccak-p
 aes-gcm-256,                    encryption,     0x2000,         draft,      AES Galois/Counter Mode with 256-bit key and 12-byte IV
+aes-gcm-128,                    encryption,     0x2001,         draft,      AES Galois/Counter Mode with 128-bit key and 12-byte IV
 silverpine,                     multiaddr,      0x3f42,         draft,      Experimental QUIC over yggdrasil and ironwood routing protocol
 sm3-256,                        multihash,      0x534d,         draft,
 sha256a,                        hash,           0x7012,         draft,      The sum of multiple sha2-256 hashes; as specified by Ceramic CIP-124.
+chacha20-poly1305,              multikey,       0xa000,         draft,      ChaCha20_Poly1305 encryption scheme
+xchacha20-poly1305,             encryption,     0xa001,         draft,      XChaCha20-Poly1305 extended nonce AEAD
 blake2b-8,                      multihash,      0xb201,         draft,      Blake2b consists of 64 output lengths that give different hashes
 blake2b-16,                     multihash,      0xb202,         draft,
 blake2b-24,                     multihash,      0xb203,         draft,
@@ -530,18 +651,26 @@ ssz,                            serialization,  0xb501,         draft,      Simp
 ssz-sha2-256-bmt,               multihash,      0xb502,         draft,      SSZ Merkle tree root using SHA2-256 as the hashing function and SSZ serialization for the block binary
 sha2-256-chunked,               multihash,      0xb510,         draft,      Hash of concatenated SHA2-256 digests of 8*2^n MiB source chunks; n = ceil(log2(source_size/(10^4 * 8MiB)))
 json-jcs,                       ipld,           0xb601,         draft,      The result of canonicalizing an input according to JCS - JSON Canonicalisation Scheme (RFC 8785)
+bittorrent-pieces-root,         multihash,      0xb702,         draft,      BitTorrent v2 pieces root hash.
 iscc,                           softhash,       0xcc01,         draft,      ISCC (International Standard Content Code) - similarity preserving hash
 zeroxcert-imprint-256,          zeroxcert,      0xce11,         draft,      0xcert Asset Imprint (root hash)
 nonstandard-sig,                varsig,         0xd000,         deprecated, Namespace for all not yet standard signature algorithms
 bcrypt-pbkdf,                   multihash,      0xd00d,         draft,      Bcrypt-PBKDF key derivation function
-es256k,                         varsig,         0xd0e7,         draft,      ES256K Siganture Algorithm (secp256k1)
-bls-12381-g1-sig,               varsig,         0xd0ea,         draft,      G1 signature for BLS-12381-G2
-bls-12381-g2-sig,               varsig,         0xd0eb,         draft,      G2 signature for BLS-12381-G1
+hkdf-sha256,                    kdf,            0xd00e,         draft,      HKDF-SHA256 key derivation function
+es256k,                         varsig,         0xd0e7,         draft,      ES256K Signature Algorithm (secp256k1)
+bls12_381-g1-sig,               varsig,         0xd0ea,         draft,      G1 signature for BLS12-381
+bls12_381-g2-sig,               varsig,         0xd0eb,         draft,      G2 signature for BLS12-381
 eddsa,                          varsig,         0xd0ed,         draft,      Edwards-Curve Digital Signature Algorithm
 eip-191,                        varsig,         0xd191,         draft,      EIP-191 Ethereum Signed Data Standard
 jwk_jcs-pub,                    key,            0xeb51,         draft,      JSON object containing only the required members of a JWK (RFC 7518 and RFC 7517) representing the public key. Serialisation based on JCS (RFC 8785)
+ed2k,                           multihash,      0xed20,         draft,      eDonkey2000 hash.
 fil-commitment-unsealed,        filecoin,       0xf101,         permanent,  Filecoin piece or sector data commitment merkle node/root (CommP & CommD)
 fil-commitment-sealed,          filecoin,       0xf102,         permanent,  Filecoin sector data commitment merkle node/root - sealed and replicated (CommR)
+shelter-contract-manifest,      shelter,        0x511e00,       draft,      Shelter protocol contract manifest
+shelter-contract-text,          shelter,        0x511e01,       draft,      Shelter protocol contract text
+shelter-contract-data,          shelter,        0x511e02,       draft,      Shelter protocol contract data (contract chain)
+shelter-file-manifest,          shelter,        0x511e03,       draft,      Shelter protocol file manifest
+shelter-file-chunk,             shelter,        0x511e04,       draft,      Shelter protocol file chunk
 plaintextv2,                    multiaddr,      0x706c61,       draft,
 holochain-adr-v0,               holochain,      0x807124,       draft,      Holochain v0 address    + 8 R-S (63 x Base-32)
 holochain-adr-v1,               holochain,      0x817124,       draft,      Holochain v1 address    + 8 R-S (63 x Base-32)
@@ -554,19 +683,60 @@ arweave-ns,                     namespace,      0xb29910,       draft,      Arwe
 subspace-ns,                    namespace,      0xb39910,       draft,      Subspace Network Namespace
 kumandra-ns,                    namespace,      0xb49910,       draft,      Kumandra Network Namespace
 es256,                          varsig,         0xd01200,       draft,      ES256 Signature Algorithm
-es284,                          varsig,         0xd01201,       draft,      ES384 Signature Algorithm
+es384,                          varsig,         0xd01201,       draft,      ES384 Signature Algorithm
 es512,                          varsig,         0xd01202,       draft,      ES512 Signature Algorithm
 rs256,                          varsig,         0xd01205,       draft,      RS256 Signature Algorithm
 es256k-msig,                    multisig,       0xd01300,       draft,      ES256K (secp256k1) Signature as Multisig
-bls12_381-g1-msig,              multisig,       0xd01301,       draft,      G1 signature for BLS12-381-G2 as Multisig
-bls12_381-g2-msig,              multisig,       0xd01302,       draft,      G2 signature for BLS12-381-G1 as Multisig
+bls12_381-g1-msig,              multisig,       0xd01301,       draft,      G1 signature for BLS-12381-G2 as Multisig
+bls12_381-g2-msig,              multisig,       0xd01302,       draft,      G2 signature for BLS-12381-G1 as Multisig
 eddsa-msig,                     multisig,       0xd01303,       draft,      Edwards-Curve Digital Signature as Multisig
-bls12_381-g1-share-msig,        multisig,       0xd01304,       draft,      G1 threshold signature share for BLS12-381-G2 as Multisig
-bls12_381-g2-share-msig,        multisig,       0xd01305,       draft,      G2 threshold signature share for BLS12-381-G1 as Multisig
+bls12_381-g1-share-msig,        multisig,       0xd01304,       draft,      G1 threshold signature share for BLS-12381-G2 as Multisig
+bls12_381-g2-share-msig,        multisig,       0xd01305,       draft,      G2 threshold signature share for BLS-12381-G1 as Multisig
 lamport-msig,                   multisig,       0xd01306,       draft,      Lamport signature as Multisig
 lamport-share-msig,             multisig,       0xd01307,       draft,      Lamport threshold signature share as Multisig
 es256-msig,                     multisig,       0xd01308,       draft,      ECDSA P-256 Signature as Multisig
 es384-msig,                     multisig,       0xd01309,       draft,      ECDSA P-384 Signature as Multisig
 es521-msig,                     multisig,       0xd0130a,       draft,      ECDSA P-521 Signature as Multisig
 rs256-msig,                     multisig,       0xd0130b,       draft,      RS256 Signature as Multisig
+slh-dsa-sha2-128f-msig,         multisig,       0xd0130c,       draft,      SLH-DSA SHA2-128f signature as Multisig; FIPS 205
+slh-dsa-sha2-128s-msig,         multisig,       0xd01312,       draft,      SLH-DSA SHA2-128s signature as Multisig; FIPS 205
+slh-dsa-sha2-192f-msig,         multisig,       0xd01313,       draft,      SLH-DSA SHA2-192f signature as Multisig; FIPS 205
+slh-dsa-sha2-192s-msig,         multisig,       0xd01314,       draft,      SLH-DSA SHA2-192s signature as Multisig; FIPS 205
+slh-dsa-sha2-256f-msig,         multisig,       0xd01315,       draft,      SLH-DSA SHA2-256f signature as Multisig; FIPS 205
+slh-dsa-sha2-256s-msig,         multisig,       0xd01316,       draft,      SLH-DSA SHA2-256s signature as Multisig; FIPS 205
+slh-dsa-shake128f-msig,         multisig,       0xd01317,       draft,      SLH-DSA SHAKE128f signature as Multisig; FIPS 205
+slh-dsa-shake128s-msig,         multisig,       0xd01318,       draft,      SLH-DSA SHAKE128s signature as Multisig; FIPS 205
+slh-dsa-shake192f-msig,         multisig,       0xd01319,       draft,      SLH-DSA SHAKE192f signature as Multisig; FIPS 205
+slh-dsa-shake192s-msig,         multisig,       0xd0131a,       draft,      SLH-DSA SHAKE192s signature as Multisig; FIPS 205
+slh-dsa-shake256f-msig,         multisig,       0xd0131b,       draft,      SLH-DSA SHAKE256f signature as Multisig; FIPS 205
+slh-dsa-shake256s-msig,         multisig,       0xd0131c,       draft,      SLH-DSA SHAKE256s signature as Multisig; FIPS 205
+ml-dsa-65-msig,                 multisig,       0xd01310,       draft,      ML-DSA (Dilithium) 65 signature as Multisig; FIPS 204
+ml-dsa-87-msig,                 multisig,       0xd01311,       draft,      ML-DSA (Dilithium) 87 signature as Multisig; FIPS 204
+fn-dsa-512-msig,                multisig,       0xd0130e,       draft,      FN-DSA (Falcon) 512 signature as Multisig; FIPS 206 (draft)
+fn-dsa-1024-msig,               multisig,       0xd0130f,       draft,      FN-DSA (Falcon) 1024 signature as Multisig; FIPS 206 (draft)
+mayo-1-msig,                    multisig,       0xd0131d,       draft,      MAYO level 1 signature as Multisig
+mayo-2-msig,                    multisig,       0xd0131e,       draft,      MAYO level 2 signature as Multisig
+mayo-3-msig,                    multisig,       0xd01322,       draft,      MAYO level 3 signature as Multisig
+mayo-5-msig,                    multisig,       0xd01323,       draft,      MAYO level 5 signature as Multisig
+ed25519-mayo2-msig,             multisig,       0xd01320,       draft,      Ed25519-MAYO2 hybrid signature as Multisig
+ed25519-mldsa65-msig,           multisig,       0xd01324,       draft,      Ed25519-ML-DSA-65 hybrid signature as Multisig
+ed25519-fndsa512-msig,          multisig,       0xd01326,       draft,      Ed25519-FN-DSA-512 hybrid signature as Multisig
+bls12381-g1-mldsa65-msig,       multisig,       0xd01328,       draft,      BLS12-381-G1-ML-DSA-65 hybrid signature as Multisig
+bls12381-g1-fndsa512-msig,      multisig,       0xd01329,       draft,      BLS12-381-G1-FN-DSA-512 hybrid signature as Multisig
+bls12381-g1-mayo1-msig,         multisig,       0xd0132a,       draft,      BLS12-381-G1-MAYO-1 hybrid signature as Multisig
+bls12381-g1-mayo2-msig,         multisig,       0xd0132b,       draft,      BLS12-381-G1-MAYO-2 hybrid signature as Multisig
+bs-message,                     multiformat,    0xd01400,       draft,      BetterSign signed+encrypted message multiformat
 scion,                          multiaddr,      0xd02000,       draft,      SCION Internet architecture
+ed25519-thresh-priv-share,      key,            0xd03000,       draft,      Ed25519 FROST DKG threshold private key share
+ed25519-thresh-pub-share,       key,            0xd03001,       draft,      Ed25519 FROST DKG threshold public key share
+p256-thresh-priv-share,         key,            0xd03002,       draft,      P-256 FROST DKG threshold private key share
+p256-thresh-pub-share,          key,            0xd03003,       draft,      P-256 FROST DKG threshold public key share
+p384-thresh-priv-share,         key,            0xd03004,       draft,      P-384 FROST DKG threshold private key share
+p384-thresh-pub-share,          key,            0xd03005,       draft,      P-384 FROST DKG threshold public key share
+secp256k1-thresh-priv-share,    key,            0xd03006,       draft,      secp256k1 FROST DKG threshold private key share
+secp256k1-thresh-pub-share,     key,            0xd03007,       draft,      secp256k1 FROST DKG threshold public key share
+bls12-381-thresh-priv-share,    key,            0xd03008,       draft,      BLS12-381 FROST DKG threshold private key share
+bls12-381-thresh-pub-share,     key,            0xd03009,       draft,      BLS12-381 FROST DKG threshold public key share
+ed448-thresh-priv-share,        key,            0xd0300a,       draft,      Ed448 FROST DKG threshold private key share
+ed448-thresh-pub-share,         key,            0xd0300b,       draft,      Ed448 FROST DKG threshold public key share
+key-split-share,                key,            0xd0300c,       draft,      Generic verifiable private key split share (Feldman VSS or gf256)

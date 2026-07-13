@@ -71,12 +71,20 @@ impl<'de> Deserialize<'de> for Codec {
             where
                 S: de::SeqAccess<'de>,
             {
-                let mut v = Vec::new();
+                // Maximum varint length for u128 is 19 bytes
+                // u64 maximum is 10 bytes, but we use 19 for safety margin
+                const MAX_VARINT_LEN: usize = 19;
+
+                let mut v = Vec::with_capacity(MAX_VARINT_LEN.min(8));
                 while let Some(b) = seq.next_element()? {
+                    if v.len() >= MAX_VARINT_LEN {
+                        return Err(de::Error::custom(
+                            "varint exceeds maximum length of 19 bytes",
+                        ));
+                    }
                     v.push(b);
                 }
-                Self::Value::try_from(v.as_slice())
-                    .map_err(|e| de::Error::custom(e.to_string()))
+                Self::Value::try_from(v.as_slice()).map_err(|e| de::Error::custom(e.to_string()))
             }
         }
 
