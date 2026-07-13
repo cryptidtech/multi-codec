@@ -1,6 +1,6 @@
 [package]
 name = "multi-codec"
-version = "1.0.1"
+version = "1.0.2"
 edition = "2021"
 authors = ["Benjamin Kampmann <ben@gnunicorn.org>", "Dave Grantham <dwg@linuxprogrammer.org>"]
 description = "Implementation of the Multicodec specification"
@@ -14,7 +14,7 @@ categories = ["encoding"]
 default = ["serde"]
 
 [dependencies]
-multi-trait = { version = "1.0", path = "../multi-trait" }
+multi-trait = "1.0"
 serde = { version = "1.0", default-features = false, optional = true, features = ["serde_derive"] }
 thiserror = { version = "2.0" }
 
