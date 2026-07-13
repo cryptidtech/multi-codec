@@ -3,9 +3,9 @@
 
 use std::hint::black_box;
 
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
 use multi_codec::Codec;
 use multi_trait::TryDecodeFrom;
-use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
 
 /// Benchmark conversions from u64
 fn bench_from_u64(c: &mut Criterion) {

@@ -15,11 +15,11 @@
 )]
 #![allow(missing_docs)] // Allow because variants are generated
 use crate::Error;
-use multi_trait::{EncodeInto, Null, TryDecodeFrom};
 use core::{
     fmt,
     hash::{Hash, Hasher},
 };
+use multi_trait::{EncodeInto, Null, TryDecodeFrom};
 
 macro_rules! build_codec_enum {
     {$( $val:expr => ($i:ident, $s:expr), )*} => {
