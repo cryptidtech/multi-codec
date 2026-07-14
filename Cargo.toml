@@ -1,29 +1,43 @@
 [package]
-name = "multicodec"
-version = "1.0.10"
+name = "multi-codec"
+version = "1.0.2"
 edition = "2021"
 authors = ["Benjamin Kampmann <ben@gnunicorn.org>", "Dave Grantham <dwg@linuxprogrammer.org>"]
 description = "Implementation of the Multicodec specification"
-repository = "https://github.com/cryptidtech/rust-multicodec"
-license = "MIT OR Apache-2.0"
+repository = "https://github.com/cryptidtech/multi-codec.git"
 readme = "README.md"
+license = "MIT OR Apache-2.0"
 keywords = ["multiformats", "multicodec", "serde"]
+categories = ["encoding"]
 
 [features]
 default = ["serde"]
 
 [dependencies]
-multitrait = { version = "1.0", git="https://github.com/cryptidtech/multitrait.git" }
-serde = { version = "1.0", default-features = false, optional = true, features = ['serde_derive'] }
-thiserror = "1.0"
+multi-trait = "1.0"
+serde = { version = "1.0", default-features = false, optional = true, features = ["serde_derive"] }
+thiserror = { version = "2.0" }
 
 [dev-dependencies]
+criterion = { version = "0.8", features = ["html_reports"] }
+hex = "0.4"
+proptest = "1.4"
 serde_cbor = "0.11"
 serde_json = "1.0"
 serde_test = "1.0"
+unsigned-varint = { version = "0.8", features = ["std"] }
+
+[[bench]]
+name = "codec_bench"
+harness = false
+path = "benches/codec_bench.rs"
+
+[[example]]
+name = "uvi"
+path = "examples/uvi.rs"
 
 [build-dependencies]
 convert_case = "0.6"
 csv = "1.3"
-serde = "1.0"
+serde = { version = "1.0", features = ["serde_derive"] }
 serde_derive = "1.0"

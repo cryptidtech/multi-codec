@@ -1,18 +1,25 @@
 // SPDX-License-Identifier: MIT or Apache-2.0
+//! Multicodec enum and conversions
 //!
+//! This module contains the core [`Codec`] enum with 570+ variants representing
+//! all multicodec identifiers, along with conversion implementations for various
+//! types.
+//!
+//! The `Codec` enum is generated at build time from the official multicodec table.
+
 #![deny(
     trivial_casts,
     trivial_numeric_casts,
     unused_import_braces,
     unused_qualifications
 )]
-#![allow(missing_docs)]
+#![allow(missing_docs)] // Allow because variants are generated
 use crate::Error;
 use core::{
     fmt,
     hash::{Hash, Hasher},
 };
-use multitrait::{EncodeInto, Null, TryDecodeFrom};
+use multi_trait::{EncodeInto, Null, TryDecodeFrom};
 
 macro_rules! build_codec_enum {
     {$( $val:expr => ($i:ident, $s:expr), )*} => {
@@ -34,12 +41,12 @@ macro_rules! build_codec_enum {
             fn try_from(s: &str) -> Result<Self, Self::Error> {
                 match s {
                     $( $s => Ok(Codec::$i), )*
-                    _ => Err(Error::InvalidName(s.to_string())),
+                    _ => Err(Error::invalid_name(s)),
                 }
             }
         }
 
-        /// Convert a Codec into a type that implements AsRef<str>
+        /// Convert a Codec into a type that implements `AsRef<str>`
         impl From<Codec> for &str {
             fn from(codec: Codec) -> &'static str {
                 match codec {
@@ -55,7 +62,7 @@ macro_rules! build_codec_enum {
             fn try_from(v: u64) -> Result<Self, Self::Error> {
                 match v {
                     $( $val => Ok(Codec::$i), )*
-                    _ => Err(Error::InvalidValue(v)),
+                    _ => Err(Error::invalid_value(v)),
                 }
             }
         }
@@ -71,12 +78,13 @@ macro_rules! build_codec_enum {
 
         impl Hash for Codec {
             fn hash<H: Hasher>(&self, state: &mut H) {
-                let v: Vec<u8> = self.clone().into();
-                v.hash(state);
+                // Hash the u64 code directly instead of allocating a Vec
+                let code: u64 = (*self).into();
+                code.hash(state);
             }
         }
 
-        /// Serialize a Codec as a unsigned varint in a Vec<u8>
+        /// Serialize a Codec as a unsigned varint in a `Vec<u8>`
         impl From<Codec> for Vec<u8> {
             fn from(codec: Codec) -> Vec<u8> {
                 let v: u64 = codec.into();
@@ -133,6 +141,9 @@ macro_rules! build_codec_enum {
             type Error = Error;
 
             fn try_from(code: i8) -> Result<Self, Self::Error> {
+                if code < 0 {
+                    return Err(Error::negative_value(code as i64));
+                }
                 Codec::try_from(code as u64)
             }
         }
@@ -141,6 +152,9 @@ macro_rules! build_codec_enum {
             type Error = Error;
 
             fn try_from(code: i16) -> Result<Self, Self::Error> {
+                if code < 0 {
+                    return Err(Error::negative_value(code as i64));
+                }
                 Codec::try_from(code as u64)
             }
         }
@@ -149,6 +163,9 @@ macro_rules! build_codec_enum {
             type Error = Error;
 
             fn try_from(code: i32) -> Result<Self, Self::Error> {
+                if code < 0 {
+                    return Err(Error::negative_value(code as i64));
+                }
                 Codec::try_from(code as u64)
             }
         }
@@ -157,6 +174,9 @@ macro_rules! build_codec_enum {
             type Error = Error;
 
             fn try_from(code: i64) -> Result<Self, Self::Error> {
+                if code < 0 {
+                    return Err(Error::negative_value(code));
+                }
                 Codec::try_from(code as u64)
             }
         }
@@ -186,12 +206,12 @@ macro_rules! build_codec_enum {
         impl Codec {
             /// Get the base code. NOTE: these are NOT varuint encoded
             pub fn code(&self) -> u64 {
-                self.clone().into()
+                (*self).into()
             }
 
             /// Convert a codec to &str
             pub fn as_str(&self) -> &str {
-                self.clone().into()
+                (*self).into()
             }
         }
     }
