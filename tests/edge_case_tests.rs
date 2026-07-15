@@ -1,4 +1,12 @@
 // SPDX-License-Identifier: MIT or Apache-2.0
+#![allow(
+    clippy::unreadable_literal,
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    clippy::should_panic_without_expect,
+    clippy::items_after_statements,
+    clippy::match_same_arms
+)]
 //! Edge case tests for multi-codec
 //!
 //! These tests verify behavior at boundary conditions and extreme values.

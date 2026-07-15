@@ -1,9 +1,17 @@
 // SPDX-License-Identifier: MIT or Apache-2.0
+#![allow(
+    clippy::unreadable_literal,
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    clippy::should_panic_without_expect,
+    clippy::items_after_statements,
+    clippy::match_same_arms
+)]
 //! Tests for error handling and error types
 
 use multi_codec::{Codec, Error};
 
-/// Test InvalidName error creation and properties
+/// Test `InvalidName` error creation and properties
 #[test]
 fn test_invalid_name_error_properties() {
     let err = Error::invalid_name("bad-codec");
@@ -21,7 +29,7 @@ fn test_invalid_name_error_properties() {
     assert!(msg.contains("multicodec"));
 }
 
-/// Test InvalidValue error creation and properties
+/// Test `InvalidValue` error creation and properties
 #[test]
 fn test_invalid_value_error_properties() {
     let err = Error::invalid_value(0xDEADBEEF);
@@ -39,7 +47,7 @@ fn test_invalid_value_error_properties() {
     assert!(msg.contains("multicodec"));
 }
 
-/// Test NegativeValue error creation and properties
+/// Test `NegativeValue` error creation and properties
 #[test]
 fn test_negative_value_error_properties() {
     let err = Error::negative_value(-42);
@@ -57,7 +65,7 @@ fn test_negative_value_error_properties() {
     assert!(msg.contains("negative"));
 }
 
-/// Test that errors from TryFrom implementations have correct types
+/// Test that errors from `TryFrom` implementations have correct types
 #[test]
 fn test_tryfrom_str_error_type() {
     let result = Codec::try_from("nonexistent-codec");
@@ -116,7 +124,7 @@ fn test_error_kinds_are_unique() {
         Error::negative_value(-1),
     ];
 
-    let kinds: Vec<_> = errors.iter().map(|e| e.kind()).collect();
+    let kinds: Vec<_> = errors.iter().map(multi_codec::Error::kind).collect();
 
     // All kinds should be unique
     for (i, kind1) in kinds.iter().enumerate() {
@@ -179,7 +187,7 @@ fn test_error_send_sync() {
     assert_sync::<Error>();
 }
 
-/// Test error implements std::error::Error
+/// Test error implements `std::error::Error`
 #[test]
 fn test_error_trait_impl() {
     use std::error::Error as StdError;
@@ -201,17 +209,17 @@ fn test_error_trait_impl() {
 #[test]
 fn test_error_display_informative() {
     let err = Error::invalid_name("bad-name");
-    let display = format!("{}", err);
+    let display = format!("{err}");
     assert!(!display.is_empty());
     assert!(display.len() > 20); // Should be a full sentence, not just a few words
 
     let err = Error::invalid_value(999);
-    let display = format!("{}", err);
+    let display = format!("{err}");
     assert!(!display.is_empty());
     assert!(display.len() > 20);
 
     let err = Error::negative_value(-10);
-    let display = format!("{}", err);
+    let display = format!("{err}");
     assert!(!display.is_empty());
     assert!(display.len() > 20);
 }
@@ -220,7 +228,7 @@ fn test_error_display_informative() {
 #[test]
 fn test_error_debug_output() {
     let err = Error::invalid_name("test");
-    let debug = format!("{:?}", err);
+    let debug = format!("{err:?}");
     assert!(!debug.is_empty());
     assert!(debug.contains("InvalidName") || debug.contains("test"));
 }

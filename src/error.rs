@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: MIT or Apache-2.0
 //! Error types for multi-codec
 //!
-//! This module provides comprehensive error types with backtrace support
-//! for debugging and detailed error context for better user experience.
+//! Error types for multi-codec
 
 /// Errors produced by the multi-codec crate
 ///
@@ -148,7 +147,7 @@ pub enum Error {
 }
 
 impl Error {
-    /// Create an InvalidName error with the given name
+    /// Create an `InvalidName` error with the given name
     ///
     /// # Examples
     ///
@@ -158,11 +157,12 @@ impl Error {
     /// let err = Error::invalid_name("unknown-codec");
     /// assert!(matches!(err, Error::InvalidName { .. }));
     /// ```
+    #[must_use]
     pub fn invalid_name(name: impl Into<String>) -> Self {
         Self::InvalidName { name: name.into() }
     }
 
-    /// Create an InvalidValue error with the given code
+    /// Create an `InvalidValue` error with the given code
     ///
     /// # Examples
     ///
@@ -172,11 +172,12 @@ impl Error {
     /// let err = Error::invalid_value(0xDEADBEEF);
     /// assert!(matches!(err, Error::InvalidValue { .. }));
     /// ```
-    pub fn invalid_value(code: u64) -> Self {
+    #[must_use]
+    pub const fn invalid_value(code: u64) -> Self {
         Self::InvalidValue { code }
     }
 
-    /// Create a NegativeValue error with the given value
+    /// Create a `NegativeValue` error with the given value
     ///
     /// # Examples
     ///
@@ -186,7 +187,8 @@ impl Error {
     /// let err = Error::negative_value(-100);
     /// assert!(matches!(err, Error::NegativeValue { .. }));
     /// ```
-    pub fn negative_value(value: i64) -> Self {
+    #[must_use]
+    pub const fn negative_value(value: i64) -> Self {
         Self::NegativeValue { value }
     }
 
@@ -209,7 +211,8 @@ impl Error {
     /// let err = Error::negative_value(-1);
     /// assert_eq!(err.kind(), "NegativeValue");
     /// ```
-    pub fn kind(&self) -> &str {
+    #[must_use]
+    pub const fn kind(&self) -> &str {
         match self {
             Self::Multitrait(_) => "Multitrait",
             Self::InvalidName { .. } => "InvalidName",
@@ -232,12 +235,13 @@ impl Error {
     /// let context = err.context();
     /// assert!(context.contains("bad-codec"));
     /// ```
+    #[must_use]
     pub fn context(&self) -> String {
         match self {
-            Self::Multitrait(e) => format!("Multitrait error: {}", e),
-            Self::InvalidName { name } => format!("Invalid name: '{}'", name),
-            Self::InvalidValue { code } => format!("Invalid code: 0x{:x} ({})", code, code),
-            Self::NegativeValue { value } => format!("Negative value: {}", value),
+            Self::Multitrait(e) => format!("Multitrait error: {e}"),
+            Self::InvalidName { name } => format!("Invalid name: '{name}'"),
+            Self::InvalidValue { code } => format!("Invalid code: 0x{code:x} ({code})"),
+            Self::NegativeValue { value } => format!("Negative value: {value}"),
         }
     }
 }
@@ -294,10 +298,12 @@ mod tests {
             Error::negative_value(-1),
         ];
 
-        let kinds: Vec<_> = errors.iter().map(|e| e.kind()).collect();
+        let kinds: Vec<_> = errors.iter().map(Error::kind).collect();
         assert_eq!(kinds.len(), 3);
-        assert!(kinds
-            .iter()
-            .all(|k| kinds.iter().filter(|x| *x == k).count() == 1));
+        assert!(
+            kinds
+                .iter()
+                .all(|k| kinds.iter().filter(|x| *x == k).count() == 1)
+        );
     }
 }

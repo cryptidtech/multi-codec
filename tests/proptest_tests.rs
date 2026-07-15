@@ -1,4 +1,13 @@
 // SPDX-License-Identifier: MIT or Apache-2.0
+#![allow(
+    clippy::unreadable_literal,
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    clippy::should_panic_without_expect,
+    clippy::items_after_statements,
+    clippy::match_same_arms,
+    clippy::comparison_chain
+)]
 //! Property-based tests for multi-codec using proptest
 //!
 //! These tests verify that invariants hold across a wide range of inputs
@@ -66,21 +75,18 @@ fn test_code_bidirectional() {
 #[test]
 fn test_invalid_codes_rejected() {
     proptest!(|(code in 0u64..=u64::MAX)| {
-        match Codec::try_from(code) {
-            Ok(codec) => {
-                // Valid code - should roundtrip
-                let code2: u64 = codec.into();
-                prop_assert_eq!(code, code2);
-            }
-            Err(_) => {
-                // Invalid code - expected to fail
-                // Just verify it returns an error
-            }
+        if let Ok(codec) = Codec::try_from(code) {
+            // Valid code - should roundtrip
+            let code2: u64 = codec.into();
+            prop_assert_eq!(code, code2);
+        } else {
+            // Invalid code - expected to fail
+            // Just verify it returns an error
         }
     });
 }
 
-/// Property: as_str() should always return a non-empty string
+/// Property: `as_str()` should always return a non-empty string
 #[test]
 fn test_str_never_empty() {
     proptest!(|(code in 0u64..=0x0FFFFFFF)| {
@@ -97,7 +103,7 @@ fn test_str_never_empty() {
 fn test_debug_contains_name_and_code() {
     proptest!(|(code in 0u64..=0x0FFFFFFF)| {
         if let Ok(codec) = Codec::try_from(code) {
-            let debug = format!("{:?}", codec);
+            let debug = format!("{codec:?}");
             let name = codec.as_str();
 
             // Debug should contain the name
@@ -109,12 +115,12 @@ fn test_debug_contains_name_and_code() {
     });
 }
 
-/// Property: Display output should equal as_str()
+/// Property: Display output should equal `as_str()`
 #[test]
 fn test_display_equals_as_str() {
     proptest!(|(code in 0u64..=0x0FFFFFFF)| {
         if let Ok(codec) = Codec::try_from(code) {
-            let display = format!("{}", codec);
+            let display = format!("{codec}");
             let as_str = codec.as_str();
             prop_assert_eq!(display, as_str);
         }
@@ -219,7 +225,7 @@ fn test_encoded_length_bounded() {
     });
 }
 
-/// Property: TryDecodeFrom should consume exactly the encoded bytes
+/// Property: `TryDecodeFrom` should consume exactly the encoded bytes
 #[test]
 fn test_decode_consumes_exact_bytes() {
     proptest!(|(code in 0u64..=0x0FFFFFFF)| {
@@ -235,7 +241,7 @@ fn test_decode_consumes_exact_bytes() {
     });
 }
 
-/// Property: TryDecodeFrom with extra data should leave remainder
+/// Property: `TryDecodeFrom` with extra data should leave remainder
 #[test]
 fn test_decode_with_trailing_data() {
     proptest!(|(code in 0u64..=0x0FFFFFFF, trailing in prop::collection::vec(any::<u8>(), 1..20))| {

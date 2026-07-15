@@ -1,4 +1,12 @@
 // SPDX-License-Identifier: MIT OR Apache-2.0
+#![allow(
+    clippy::unreadable_literal,
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    clippy::should_panic_without_expect,
+    clippy::items_after_statements,
+    clippy::match_same_arms
+)]
 
 //! Varuint encode/decode example using unsigned-varint crate.
 //!
@@ -32,13 +40,13 @@ fn encode_hex(hex_str: &str) -> Result<(), String> {
     let cleaned = hex_str.trim().trim_start_matches("0x");
 
     let num = u64::from_str_radix(cleaned, 16)
-        .map_err(|e| format!("Invalid hex number '{}': {}", hex_str, e))?;
+        .map_err(|e| format!("Invalid hex number '{hex_str}': {e}"))?;
 
     let mut buf = unsigned_varint::encode::u64_buffer();
     let encoded = unsigned_varint::encode::u64(num, &mut buf);
 
     let hex_output = hex::encode(encoded);
-    println!("{}", hex_output);
+    println!("{hex_output}");
 
     Ok(())
 }
@@ -47,18 +55,17 @@ fn decode_hex(hex_str: &str) -> Result<(), String> {
     // Remove any whitespace or 0x prefix
     let cleaned = hex_str.trim().trim_start_matches("0x");
 
-    let bytes =
-        hex::decode(cleaned).map_err(|e| format!("Invalid hex string '{}': {}", hex_str, e))?;
+    let bytes = hex::decode(cleaned).map_err(|e| format!("Invalid hex string '{hex_str}': {e}"))?;
 
     let (num, remaining) = unsigned_varint::decode::u64(&bytes)
-        .map_err(|e| format!("Failed to decode varuint: {:?}", e))?;
+        .map_err(|e| format!("Failed to decode varuint: {e:?}"))?;
 
     if !remaining.is_empty() {
         eprintln!("Warning: {} extra bytes after varuint", remaining.len());
     }
 
     // Output as hex with decimal in parentheses
-    println!("{:x} ({})", num, num);
+    println!("{num:x} ({num})");
 
     Ok(())
 }
@@ -81,7 +88,7 @@ fn main() {
     };
 
     if let Err(e) = result {
-        eprintln!("Error: {}", e);
+        eprintln!("Error: {e}");
         process::exit(1);
     }
 }

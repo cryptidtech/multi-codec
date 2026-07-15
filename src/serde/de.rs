@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT or Apache-2.0
 use crate::Codec;
 use core::fmt;
-use serde::{de, Deserialize, Deserializer};
+use serde::{Deserialize, Deserializer, de};
 
 /// Deserialize instances of [`crate::prelude::Codec`] from a varuint encoded
 /// byte slice or a u8, u16, u32, or u64 value.
