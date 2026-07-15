@@ -1,20 +1,28 @@
 // SPDX-License-Identifier: MIT or Apache-2.0
+#![allow(
+    clippy::unreadable_literal,
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    clippy::should_panic_without_expect,
+    clippy::items_after_statements,
+    clippy::match_same_arms
+)]
 //! Performance benchmarks for multi-codec
 
 use std::hint::black_box;
 
-use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
+use criterion::{BenchmarkId, Criterion, criterion_group, criterion_main};
 use multi_codec::Codec;
 use multi_trait::TryDecodeFrom;
 
 /// Benchmark conversions from u64
 fn bench_from_u64(c: &mut Criterion) {
     c.bench_function("codec_from_u64_valid", |b| {
-        b.iter(|| Codec::try_from(black_box(0xEDu64)))
+        b.iter(|| Codec::try_from(black_box(0xEDu64)));
     });
 
     c.bench_function("codec_from_u64_invalid", |b| {
-        b.iter(|| Codec::try_from(black_box(0xDEADBEEFu64)))
+        b.iter(|| Codec::try_from(black_box(0xDEADBEEFu64)));
     });
 }
 
@@ -25,7 +33,7 @@ fn bench_to_u64(c: &mut Criterion) {
     c.bench_function("codec_to_u64", |b| {
         b.iter(|| {
             let _code: u64 = black_box(codec).into();
-        })
+        });
     });
 
     c.bench_function("codec_code_method", |b| b.iter(|| black_box(codec).code()));
@@ -34,11 +42,11 @@ fn bench_to_u64(c: &mut Criterion) {
 /// Benchmark conversions from string
 fn bench_from_str(c: &mut Criterion) {
     c.bench_function("codec_from_str_valid", |b| {
-        b.iter(|| Codec::try_from(black_box("ed25519-pub")))
+        b.iter(|| Codec::try_from(black_box("ed25519-pub")));
     });
 
     c.bench_function("codec_from_str_invalid", |b| {
-        b.iter(|| Codec::try_from(black_box("unknown-codec")))
+        b.iter(|| Codec::try_from(black_box("unknown-codec")));
     });
 }
 
@@ -49,7 +57,7 @@ fn bench_to_str(c: &mut Criterion) {
         b.iter(|| {
             let s = codec.as_str();
             black_box(s.len())
-        })
+        });
     });
 }
 
@@ -67,7 +75,7 @@ fn bench_encoding(c: &mut Criterion) {
         group.bench_with_input(BenchmarkId::new("into_vec", name), &codec, |b, &codec| {
             b.iter(|| {
                 let _v: Vec<u8> = black_box(codec).into();
-            })
+            });
         });
     }
 
@@ -107,7 +115,7 @@ fn bench_hash(c: &mut Criterion) {
             let mut hasher = DefaultHasher::new();
             black_box(codec).hash(&mut hasher);
             hasher.finish()
-        })
+        });
     });
 }
 
@@ -121,7 +129,7 @@ fn bench_roundtrip(c: &mut Criterion) {
             let encoded: Vec<u8> = black_box(codec).into();
             let (decoded, _) = Codec::try_decode_from(black_box(&encoded)).unwrap();
             black_box(decoded);
-        })
+        });
     });
 
     group.bench_function("str_codec_str", |b| {
@@ -129,14 +137,14 @@ fn bench_roundtrip(c: &mut Criterion) {
             let codec = Codec::try_from(black_box("ed25519-pub")).unwrap();
             let len = codec.as_str().len();
             black_box(len);
-        })
+        });
     });
 
     group.bench_function("u64_codec_u64", |b| {
         b.iter(|| {
             let codec = Codec::try_from(black_box(0xEDu64)).unwrap();
             let _code: u64 = codec.into();
-        })
+        });
     });
 
     group.finish();
@@ -152,21 +160,21 @@ fn bench_serde(c: &mut Criterion) {
     let codec = Codec::Ed25519Pub;
 
     group.bench_function("json_serialize", |b| {
-        b.iter(|| serde_json::to_string(&black_box(codec)))
+        b.iter(|| serde_json::to_string(&black_box(codec)));
     });
 
     let json = serde_json::to_string(&codec).unwrap();
     group.bench_function("json_deserialize", |b| {
-        b.iter(|| serde_json::from_str::<Codec>(black_box(&json)))
+        b.iter(|| serde_json::from_str::<Codec>(black_box(&json)));
     });
 
     group.bench_function("cbor_serialize", |b| {
-        b.iter(|| serde_cbor::to_vec(&black_box(codec)))
+        b.iter(|| serde_cbor::to_vec(&black_box(codec)));
     });
 
     let cbor = serde_cbor::to_vec(&codec).unwrap();
     group.bench_function("cbor_deserialize", |b| {
-        b.iter(|| serde_cbor::from_slice::<Codec>(black_box(&cbor)))
+        b.iter(|| serde_cbor::from_slice::<Codec>(black_box(&cbor)));
     });
 
     group.finish();

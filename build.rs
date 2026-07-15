@@ -34,14 +34,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Open input file
     let inf = File::open(&tpb).map_err(|e| {
-        format!(
-            "Failed to open table.csv: {}. Make sure table.csv exists in the crate root.",
-            e
-        )
+        format!("Failed to open table.csv: {e}. Make sure table.csv exists in the crate root.")
     })?;
 
     // Open output file
-    let mut f = File::create(&pb).map_err(|e| format!("Failed to create table_gen.rs: {}", e))?;
+    let mut f = File::create(&pb).map_err(|e| format!("Failed to create table_gen.rs: {e}"))?;
 
     let mut rdr = csv::Reader::from_reader(inf);
     let conv = Converter::new().to_case(Case::Pascal);
@@ -67,21 +64,27 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             return Err(format!("Empty name at row {}", row_num + 2).into());
         }
 
-        // Check for duplicates
+        // Check for duplicates — duplicate codes/names produce ambiguous enum
+        // variants and must fail the build rather than silently emitting a
+        // warning. The Rust compiler would eventually reject duplicate match
+        // arms, but failing early in the build script gives a clearer error
+        // pointing at the offending CSV row.
         if !seen_codes.insert(code_str.to_string()) {
-            eprintln!(
-                "Warning: Duplicate code {} at row {}",
+            return Err(format!(
+                "Duplicate code {} at row {} in table.csv — each multicodec code must be unique",
                 code_str,
                 row_num + 2
-            );
+            )
+            .into());
         }
 
         if !seen_names.insert(rec.name.clone()) {
-            eprintln!(
-                "Warning: Duplicate name '{}' at row {}",
+            return Err(format!(
+                "Duplicate name '{}' at row {} in table.csv — each multicodec name must be unique",
                 rec.name,
                 row_num + 2
-            );
+            )
+            .into());
         }
 
         // Generate enum variant

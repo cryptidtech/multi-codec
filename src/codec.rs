@@ -8,12 +8,19 @@
 //! The `Codec` enum is generated at build time from the official multicodec table.
 
 #![deny(
+    unsafe_code,
     trivial_casts,
     trivial_numeric_casts,
     unused_import_braces,
     unused_qualifications
 )]
-#![allow(missing_docs)] // Allow because variants are generated
+#![allow(missing_docs)]
+// Allow because variants are generated
+// The `build_codec_enum!` invocation in the included `table_gen.rs` contains
+// raw hex literals (e.g. `0xd03009`) for multicodec codes that clippy
+// `unreadable_literal` would flag. These are generated from the official
+// multicodec table and should not be hand-edited.
+#![allow(clippy::unreadable_literal)]
 use crate::Error;
 use core::{
     fmt,
@@ -92,7 +99,17 @@ macro_rules! build_codec_enum {
             }
         }
 
-        /// Try to deserialized a Codec from an unsigned varint byte slice
+        /// Try to deserialize a [`Codec`] from the unsigned varint at the start
+        /// of `bytes`.
+        ///
+        /// # Warning
+        ///
+        /// This discards any bytes following the varint. Callers parsing a
+        /// multicodec-tagged stream that may contain trailing data should use
+        /// [`TryDecodeFrom`] (via [`Codec::try_decode_from`]) instead, which
+        /// returns both the codec and the remaining slice. The `TryFrom` impl
+        /// is only appropriate when `bytes` is expected to contain exactly one
+        /// varint and nothing else.
         impl<'a> TryFrom<&'a [u8]> for Codec {
             type Error = Error;
 
@@ -117,7 +134,7 @@ macro_rules! build_codec_enum {
             type Error = Error;
 
             fn try_from(code: u8) -> Result<Self, Self::Error> {
-                Codec::try_from(code as u64)
+                Codec::try_from(u64::from(code))
             }
         }
 
@@ -125,7 +142,7 @@ macro_rules! build_codec_enum {
             type Error = Error;
 
             fn try_from(code: u16) -> Result<Self, Self::Error> {
-                Codec::try_from(code as u64)
+                Codec::try_from(u64::from(code))
             }
         }
 
@@ -133,7 +150,7 @@ macro_rules! build_codec_enum {
             type Error = Error;
 
             fn try_from(code: u32) -> Result<Self, Self::Error> {
-                Codec::try_from(code as u64)
+                Codec::try_from(u64::from(code))
             }
         }
 
@@ -142,9 +159,9 @@ macro_rules! build_codec_enum {
 
             fn try_from(code: i8) -> Result<Self, Self::Error> {
                 if code < 0 {
-                    return Err(Error::negative_value(code as i64));
+                    return Err(Error::negative_value(i64::from(code)));
                 }
-                Codec::try_from(code as u64)
+                Codec::try_from(u64::try_from(code).expect("checked non-negative"))
             }
         }
 
@@ -153,9 +170,9 @@ macro_rules! build_codec_enum {
 
             fn try_from(code: i16) -> Result<Self, Self::Error> {
                 if code < 0 {
-                    return Err(Error::negative_value(code as i64));
+                    return Err(Error::negative_value(i64::from(code)));
                 }
-                Codec::try_from(code as u64)
+                Codec::try_from(u64::try_from(code).expect("checked non-negative"))
             }
         }
 
@@ -164,9 +181,9 @@ macro_rules! build_codec_enum {
 
             fn try_from(code: i32) -> Result<Self, Self::Error> {
                 if code < 0 {
-                    return Err(Error::negative_value(code as i64));
+                    return Err(Error::negative_value(i64::from(code)));
                 }
-                Codec::try_from(code as u64)
+                Codec::try_from(u64::try_from(code).expect("checked non-negative"))
             }
         }
 
@@ -177,7 +194,7 @@ macro_rules! build_codec_enum {
                 if code < 0 {
                     return Err(Error::negative_value(code));
                 }
-                Codec::try_from(code as u64)
+                Codec::try_from(u64::try_from(code).expect("checked non-negative"))
             }
         }
 
@@ -205,11 +222,15 @@ macro_rules! build_codec_enum {
 
         impl Codec {
             /// Get the base code. NOTE: these are NOT varuint encoded
+            #[inline]
+            #[must_use]
             pub fn code(&self) -> u64 {
                 (*self).into()
             }
 
             /// Convert a codec to &str
+            #[inline]
+            #[must_use]
             pub fn as_str(&self) -> &str {
                 (*self).into()
             }
@@ -275,13 +296,13 @@ mod tests {
     }
 
     #[test]
-    #[should_panic]
+    #[should_panic = "InvalidValue"]
     fn test_invalid_value() {
         Codec::try_from(0xDEAD_u64).unwrap();
     }
 
     #[test]
-    #[should_panic]
+    #[should_panic = "InvalidName"]
     fn test_invalid_name() {
         Codec::try_from("move-zig").unwrap();
     }

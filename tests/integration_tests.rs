@@ -1,4 +1,12 @@
 // SPDX-License-Identifier: MIT or Apache-2.0
+#![allow(
+    clippy::unreadable_literal,
+    clippy::cast_possible_truncation,
+    clippy::cast_sign_loss,
+    clippy::should_panic_without_expect,
+    clippy::items_after_statements,
+    clippy::match_same_arms
+)]
 //! Integration tests for multi-codec
 //!
 //! These tests verify cross-module interactions and real-world usage scenarios.
@@ -77,7 +85,7 @@ fn test_codec_in_struct() {
     assert_eq!(msg, msg2);
 }
 
-/// Test using codec as HashMap key
+/// Test using codec as `HashMap` key
 #[test]
 fn test_codec_as_hashmap_key() {
     use std::collections::HashMap;
@@ -93,7 +101,7 @@ fn test_codec_as_hashmap_key() {
     assert_eq!(map.len(), 3);
 }
 
-/// Test using codec in a BTreeMap (requires Ord)
+/// Test using codec in a `BTreeMap` (requires Ord)
 #[test]
 fn test_codec_in_btreemap() {
     use std::collections::BTreeMap;
@@ -141,15 +149,15 @@ fn test_codec_in_result() {
 /// Test codec in Vec
 #[test]
 fn test_codec_in_vec() {
-    let codecs = [Codec::Identity, Codec::Sha2256, Codec::Ed25519Pub];
+    let codec_list = [Codec::Identity, Codec::Sha2256, Codec::Ed25519Pub];
 
-    assert_eq!(codecs.len(), 3);
-    assert_eq!(codecs[0], Codec::Identity);
-    assert_eq!(codecs[1].code(), 0x12);
-    assert_eq!(codecs[2].as_str(), "ed25519-pub");
+    assert_eq!(codec_list.len(), 3);
+    assert_eq!(codec_list[0], Codec::Identity);
+    assert_eq!(codec_list[1].code(), 0x12);
+    assert_eq!(codec_list[2].as_str(), "ed25519-pub");
 
     // Iteration
-    let codes: Vec<u64> = codecs.iter().map(|c| c.code()).collect();
+    let codes: Vec<u64> = codec_list.iter().map(multi_codec::Codec::code).collect();
     assert_eq!(codes, vec![0x00, 0x12, 0xED]);
 }
 
@@ -270,11 +278,11 @@ fn test_display_format() {
     let codec = Codec::Ed25519Pub;
 
     // Display should show the name
-    let display = format!("{}", codec);
+    let display = format!("{codec}");
     assert_eq!(display, "ed25519-pub");
 
     // Debug should show both name and code
-    let debug = format!("{:?}", codec);
+    let debug = format!("{codec:?}");
     assert!(debug.contains("ed25519-pub"));
     assert!(debug.contains("0xed"));
 }

@@ -57,7 +57,7 @@ use core::fmt;
 pub struct CodecCode(u64);
 
 impl CodecCode {
-    /// Create a new CodecCode from a u64 value
+    /// Create a new `CodecCode` from a u64 value
     ///
     /// # Examples
     ///
@@ -67,6 +67,7 @@ impl CodecCode {
     /// let code = CodecCode::new(0xED);
     /// assert_eq!(code.get(), 0xED);
     /// ```
+    #[must_use]
     pub const fn new(code: u64) -> Self {
         Self(code)
     }
@@ -81,6 +82,7 @@ impl CodecCode {
     /// let code = CodecCode::new(0x12);
     /// assert_eq!(code.get(), 0x12);
     /// ```
+    #[must_use]
     pub const fn get(self) -> u64 {
         self.0
     }
@@ -95,6 +97,7 @@ impl CodecCode {
     /// let code = CodecCode::new(0xED);
     /// assert_eq!(code.as_hex(), "0xed");
     /// ```
+    #[must_use]
     pub fn as_hex(&self) -> String {
         format!("0x{:x}", self.0)
     }
@@ -112,6 +115,7 @@ impl CodecCode {
     /// let other = CodecCode::new(0xED);
     /// assert!(!other.is_identity());
     /// ```
+    #[must_use]
     pub const fn is_identity(&self) -> bool {
         self.0 == 0
     }
@@ -124,7 +128,7 @@ impl From<u64> for CodecCode {
 }
 
 impl From<CodecCode> for u64 {
-    fn from(code: CodecCode) -> u64 {
+    fn from(code: CodecCode) -> Self {
         code.0
     }
 }
@@ -174,7 +178,7 @@ impl fmt::UpperHex for CodecCode {
 pub struct CodecName(String);
 
 impl CodecName {
-    /// Create a new CodecName from a string
+    /// Create a new `CodecName` from a string
     ///
     /// # Examples
     ///
@@ -198,6 +202,7 @@ impl CodecName {
     /// let name = CodecName::new("sha2-256");
     /// assert_eq!(name.as_str(), "sha2-256");
     /// ```
+    #[must_use]
     pub fn as_str(&self) -> &str {
         &self.0
     }
@@ -215,6 +220,7 @@ impl CodecName {
     /// let other = CodecName::new("sha2-256");
     /// assert!(!other.is_identity());
     /// ```
+    #[must_use]
     pub fn is_identity(&self) -> bool {
         self.0 == "identity"
     }
@@ -229,6 +235,7 @@ impl CodecName {
     /// let name = CodecName::new("sha2-256");
     /// assert_eq!(name.len(), 8);
     /// ```
+    #[must_use]
     pub fn len(&self) -> usize {
         self.0.len()
     }
@@ -246,6 +253,7 @@ impl CodecName {
     /// let name = CodecName::new("sha2-256");
     /// assert!(!name.is_empty());
     /// ```
+    #[must_use]
     pub fn is_empty(&self) -> bool {
         self.0.is_empty()
     }
@@ -264,7 +272,7 @@ impl From<&str> for CodecName {
 }
 
 impl From<CodecName> for String {
-    fn from(name: CodecName) -> String {
+    fn from(name: CodecName) -> Self {
         name.0
     }
 }
@@ -283,6 +291,7 @@ impl fmt::Display for CodecName {
 
 #[cfg(test)]
 mod tests {
+    #![allow(clippy::items_after_statements)]
     use super::*;
 
     #[test]
@@ -301,8 +310,8 @@ mod tests {
     fn test_codec_code_display() {
         let code = CodecCode::new(0xED);
         assert_eq!(code.to_string(), "0xed");
-        assert_eq!(format!("{:x}", code), "ed");
-        assert_eq!(format!("{:X}", code), "ED");
+        assert_eq!(format!("{code:x}"), "ed");
+        assert_eq!(format!("{code:X}"), "ED");
     }
 
     #[test]

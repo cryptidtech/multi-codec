@@ -8,18 +8,18 @@ mod tests {
     use crate::prelude::Codec;
     use multi_trait::Null;
     use serde::{Deserialize, Serialize};
-    use serde_test::{assert_tokens, Configure, Token};
+    use serde_test::{Configure, Token, assert_tokens};
 
     #[test]
     fn test_serde_binary() {
         let c = Codec::Ed25519Pub;
-        assert_tokens(&c.compact(), &[Token::BorrowedBytes(&[0xED, 0x01])])
+        assert_tokens(&c.compact(), &[Token::BorrowedBytes(&[0xED, 0x01])]);
     }
 
     #[test]
     fn test_serde_readable() {
         let c = Codec::Ed25519Pub;
-        assert_tokens(&c.readable(), &[Token::BorrowedStr("ed25519-pub")])
+        assert_tokens(&c.readable(), &[Token::BorrowedStr("ed25519-pub")]);
     }
 
     #[test]
@@ -48,7 +48,7 @@ mod tests {
         let w2 = serde_cbor::from_slice(b.as_slice()).unwrap();
         assert_eq!(w1, w2);
         let s = serde_json::to_string_pretty(&w1).unwrap();
-        println!("{}", s);
+        println!("{s}");
         let w3 = serde_json::from_str(&s).unwrap();
         assert_eq!(w1, w3);
     }

@@ -182,10 +182,11 @@
 //!
 //! - **Codec enum**: Zero-cost abstraction, `Copy` type (no heap allocations)
 //! - **String lookups**: O(1) hash table lookups
-//! - **Code lookups**: O(log n) binary search in generated match expressions
+//! - **Code lookups**: sequential match on the generated enum (the compiler may
+//!   optimize large matches to a jump table, but O(log n) is not guaranteed)
 //! - **Encoding**: Stack-allocated buffers (no heap allocation)
-//! - **Hash**: Direct u64 hashing (optimized in Phase 1)
-//! - **Serialization**: Stack-allocated arrays (optimized in Phase 1)
+//! - **Hash**: Direct u64 hashing (no intermediate allocation)
+//! - **Serialization**: Stack-allocated arrays (no heap allocation)
 //!
 //! ## Security
 //!
@@ -193,7 +194,7 @@
 //!
 //! - **No unsafe code**: Completely safe Rust implementation
 //! - **Input validation**: All conversions validate input ranges
-//! - **DoS protection**: Size limits on deserialization (max 19 bytes)
+//! - **`DoS` protection**: Size limits on deserialization (max 19 bytes)
 //! - **Integer overflow protection**: Negative value checks in signed conversions
 //! - **Error handling**: All errors return `Result` types, no panics on invalid input
 //! - **Thread safety**: All types are `Send + Sync` with no shared mutable state
@@ -262,7 +263,8 @@
 //!
 //! ## Examples
 //!
-//! See the `docs/multicodec/` directory for additional documentation and examples.
+//! See the [Multicodec specification](https://github.com/multiformats/multicodec)
+//! and the crate-level examples in this file for additional usage.
 //!
 //! ## Specification Compliance
 //!
@@ -271,6 +273,7 @@
 
 #![warn(missing_docs)]
 #![deny(
+    unsafe_code,
     trivial_casts,
     trivial_numeric_casts,
     unused_import_braces,
