@@ -10,6 +10,14 @@ mod tests {
     use serde::{Deserialize, Serialize};
     use serde_test::{Configure, Token, assert_tokens};
 
+    /// Serialize a value to CBOR bytes using `ciborium` (replaces the
+    /// unmaintained `serde_cbor` dev-dependency).
+    fn cbor_to_vec<T: Serialize>(value: &T) -> Vec<u8> {
+        let mut buf = Vec::new();
+        ciborium::into_writer(value, &mut buf).expect("CBOR serialize");
+        buf
+    }
+
     #[test]
     fn test_serde_binary() {
         let c = Codec::Ed25519Pub;
@@ -44,8 +52,8 @@ mod tests {
         let w1 = Wrapper {
             v: Codec::Ed25519Pub,
         };
-        let b = serde_cbor::to_vec(&w1).unwrap();
-        let w2 = serde_cbor::from_slice(b.as_slice()).unwrap();
+        let b = cbor_to_vec(&w1);
+        let w2 = ciborium::from_reader(b.as_slice()).unwrap();
         assert_eq!(w1, w2);
         let s = serde_json::to_string_pretty(&w1).unwrap();
         println!("{s}");
@@ -60,8 +68,8 @@ mod tests {
         };
 
         let mut b: Vec<u8> = Vec::new();
-        serde_cbor::to_writer(&mut b, &w1).unwrap();
-        let w2: Wrapper = serde_cbor::from_reader(b.as_slice()).unwrap();
+        ciborium::into_writer(&w1, &mut b).unwrap();
+        let w2: Wrapper = ciborium::from_reader(b.as_slice()).unwrap();
         assert_eq!(w1, w2);
     }
 

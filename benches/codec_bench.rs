@@ -15,6 +15,13 @@ use criterion::{BenchmarkId, Criterion, criterion_group, criterion_main};
 use multi_codec::Codec;
 use multi_trait::TryDecodeFrom;
 
+/// Serialize a value to CBOR bytes using `ciborium`.
+fn cbor_to_vec<T: serde::Serialize>(value: &T) -> Vec<u8> {
+    let mut buf = Vec::new();
+    ciborium::into_writer(value, &mut buf).expect("CBOR serialize");
+    buf
+}
+
 /// Benchmark conversions from u64
 fn bench_from_u64(c: &mut Criterion) {
     c.bench_function("codec_from_u64_valid", |b| {
@@ -169,12 +176,12 @@ fn bench_serde(c: &mut Criterion) {
     });
 
     group.bench_function("cbor_serialize", |b| {
-        b.iter(|| serde_cbor::to_vec(&black_box(codec)));
+        b.iter(|| cbor_to_vec(&black_box(codec)));
     });
 
-    let cbor = serde_cbor::to_vec(&codec).unwrap();
+    let cbor = cbor_to_vec(&codec);
     group.bench_function("cbor_deserialize", |b| {
-        b.iter(|| serde_cbor::from_slice::<Codec>(black_box(&cbor)));
+        b.iter(|| ciborium::from_reader::<Codec, _>(black_box(cbor.as_slice())));
     });
 
     group.finish();
