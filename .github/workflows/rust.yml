@@ -46,6 +46,22 @@ jobs:
       - name: Check
         run: cargo check --all-features
 
+  ensure_no_std:
+    name: Ensure no_std
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust Toolchain (nightly)
+        uses: dtolnay/rust-toolchain@nightly
+        with:
+          targets: thumbv6m-none-eabi
+
+      - name: Build (no_std)
+        run: cargo build --no-default-features --target thumbv6m-none-eabi
+        shell: bash
+
   audit:
     name: Security Audit
     runs-on: ubuntu-latest

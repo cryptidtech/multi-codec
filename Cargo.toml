@@ -1,6 +1,6 @@
 [package]
 name = "multi-codec"
-version = "1.0.3"
+version = "1.0.4"
 edition = "2024"
 rust-version = "1.85"
 authors = ["Benjamin Kampmann <ben@gnunicorn.org>", "Dave Grantham <dwg@linuxprogrammer.org>"]
@@ -8,16 +8,18 @@ description = "Implementation of the Multicodec specification"
 repository = "https://github.com/cryptidtech/multi-codec.git"
 readme = "README.md"
 license = "MIT OR Apache-2.0"
-keywords = ["multiformats", "multicodec", "serde"]
+keywords = ["multiformats", "multicodec", "serde", "no_std"]
 categories = ["encoding"]
 
 [features]
-default = ["serde"]
+default = ["std", "serde"]
+std = ["thiserror/std", "serde/std", "multi-trait/std"]
+serde = ["dep:serde"]
 
 [dependencies]
-multi-trait = "1.0"
+multi-trait = { version = "1.0", default-features = false }
+thiserror = { version = "2.0", default-features = false }
 serde = { version = "1.0", default-features = false, optional = true, features = ["serde_derive"] }
-thiserror = { version = "2.0" }
 
 [dev-dependencies]
 criterion = { version = "0.8", features = ["html_reports"] }

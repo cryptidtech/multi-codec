@@ -50,6 +50,7 @@ in sync with the [official multicodec table](https://github.com/multiformats/mul
 - **570+ Codec Variants**: All standardized multicodec identifiers
 - **Type-Safe Conversions**: `TryFrom`/`Into` for all numeric types and strings
 - **Serde Support**: JSON and binary serialization (feature-gated)
+- **`no_std` Support**: Works in `no_std` environments with `alloc`
 - **Zero Unsafe Code**: `#![deny(unsafe_code)]` enforced at compile time
 - **Thread-Safe**: All types are `Send + Sync`
 - **Type-Safe Newtypes**: `CodecCode` and `CodecName` wrappers
@@ -64,11 +65,18 @@ Add this to your `Cargo.toml`:
 multi-codec = "1.0"
 ```
 
-For `no_std` environments (serde disabled):
+For `no_std` environments (disable `std` and `serde`):
 
 ```toml
 [dependencies]
 multi-codec = { version = "1.0", default-features = false }
+```
+
+To use serde under `no_std`, enable only the `serde` feature:
+
+```toml
+[dependencies]
+multi-codec = { version = "1.0", default-features = false, features = ["serde"] }
 ```
 
 **MSRV**: Rust 1.85 (Edition 2024)
