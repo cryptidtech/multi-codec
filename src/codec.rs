@@ -22,6 +22,8 @@
 // multicodec table and should not be hand-edited.
 #![allow(clippy::unreadable_literal)]
 use crate::Error;
+#[cfg(not(feature = "std"))]
+use alloc::vec::Vec;
 use core::{
     fmt,
     hash::{Hash, Hasher},

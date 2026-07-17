@@ -3,6 +3,11 @@
 //!
 //! Error types for multi-codec
 
+#[cfg(not(feature = "std"))]
+use alloc::format;
+#[cfg(not(feature = "std"))]
+use alloc::string::String;
+
 /// Errors produced by the multi-codec crate
 ///
 /// All error variants include contextual information to help with debugging

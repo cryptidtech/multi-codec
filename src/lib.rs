@@ -21,6 +21,7 @@
 //! - **570+ Codec Variants**: All standardized multicodec identifiers
 //! - **Type-Safe Conversions**: `TryFrom`/`Into` for all numeric types and strings
 //! - **Serde Support**: JSON and binary serialization (feature-gated)
+//! - **`no_std` Support**: Works in `no_std` environments with `alloc`
 //! - **Zero Unsafe Code**: Completely safe Rust implementation
 //! - **Thread-Safe**: All types are `Send + Sync`
 //! - **Type Safety**: Optional newtype wrappers ([`CodecCode`], [`CodecName`])
@@ -209,13 +210,25 @@
 //!
 //! ## Feature Flags
 //!
+//! - **`std`** (default): Enables `std` support (pulls in `std`-gated features of dependencies)
 //! - **`serde`** (default): Enables serde serialization/deserialization support
 //!
-//! ### Disabling Default Features
+//! ### `no_std` Support
+//!
+//! This crate works in `no_std` environments with `alloc`. Disable the default
+//! features:
 //!
 //! ```toml
 //! [dependencies]
 //! multi-codec = { version = "1.0", default-features = false }
+//! ```
+//!
+//! This drops the `std` and `serde` features. To use serde under `no_std`,
+//! enable only the `serde` feature:
+//!
+//! ```toml
+//! [dependencies]
+//! multi-codec = { version = "1.0", default-features = false, features = ["serde"] }
 //! ```
 //!
 //! ## Common Patterns
@@ -279,6 +292,10 @@
     unused_import_braces,
     unused_qualifications
 )]
+#![cfg_attr(not(feature = "std"), no_std)]
+
+#[cfg(not(feature = "std"))]
+extern crate alloc;
 
 /// Errors produced by this library
 pub mod error;

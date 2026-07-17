@@ -28,6 +28,10 @@
 //! assert_eq!(name.as_str(), "ed25519-pub");
 //! ```
 
+#[cfg(not(feature = "std"))]
+use alloc::format;
+#[cfg(not(feature = "std"))]
+use alloc::string::{String, ToString};
 use core::fmt;
 
 /// A codec code value (0x00 - 0xFFFFFFFFFFFFFFFF)

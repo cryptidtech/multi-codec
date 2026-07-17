@@ -1,5 +1,9 @@
 // SPDX-License-Identifier: MIT or Apache-2.0
 use crate::Codec;
+#[cfg(not(feature = "std"))]
+use alloc::string::ToString;
+#[cfg(not(feature = "std"))]
+use alloc::vec::Vec;
 use core::fmt;
 use serde::{Deserialize, Deserializer, de};
 
