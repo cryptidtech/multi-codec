@@ -17,6 +17,13 @@ use multi_codec::Codec;
 use multi_trait::TryDecodeFrom;
 use proptest::prelude::*;
 
+/// Serialize a value to CBOR bytes using `ciborium`.
+fn cbor_to_vec<T: serde::Serialize>(value: &T) -> Vec<u8> {
+    let mut buf = Vec::new();
+    ciborium::into_writer(value, &mut buf).expect("CBOR serialize");
+    buf
+}
+
 /// Property: Encoding and decoding should roundtrip for valid codecs
 #[test]
 fn test_encode_decode_roundtrip() {
@@ -277,8 +284,8 @@ mod serde_props {
     fn test_cbor_roundtrip() {
         proptest!(|(code in 0u64..=0x0FFFFFFF)| {
             if let Ok(codec) = Codec::try_from(code) {
-                let bytes = serde_cbor::to_vec(&codec).unwrap();
-                let decoded: Codec = serde_cbor::from_slice(&bytes).unwrap();
+                let bytes = cbor_to_vec(&codec);
+                let decoded: Codec = ciborium::from_reader(bytes.as_slice()).unwrap();
                 prop_assert_eq!(codec, decoded);
             }
         });

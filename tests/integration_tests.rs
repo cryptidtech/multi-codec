@@ -14,6 +14,13 @@
 use multi_codec::{Codec, Error};
 use multi_trait::TryDecodeFrom;
 
+/// Serialize a value to CBOR bytes using `ciborium`.
+fn cbor_to_vec<T: serde::Serialize>(value: &T) -> Vec<u8> {
+    let mut buf = Vec::new();
+    ciborium::into_writer(value, &mut buf).expect("CBOR serialize");
+    buf
+}
+
 /// Test complete encode/decode cycle
 #[test]
 fn test_full_encode_decode_cycle() {
@@ -318,8 +325,8 @@ mod serde_integration {
         assert_eq!(decoded.algorithm.code(), 0xED);
 
         // CBOR roundtrip
-        let bytes = serde_cbor::to_vec(&op).unwrap();
-        let decoded: CryptoOperation = serde_cbor::from_slice(&bytes).unwrap();
+        let bytes = cbor_to_vec(&op);
+        let decoded: CryptoOperation = ciborium::from_reader(bytes.as_slice()).unwrap();
         assert_eq!(decoded, op);
     }
 
@@ -350,8 +357,8 @@ mod serde_integration {
         assert_eq!(decoded, config);
 
         // CBOR roundtrip
-        let bytes = serde_cbor::to_vec(&config).unwrap();
-        let decoded: Outer = serde_cbor::from_slice(&bytes).unwrap();
+        let bytes = cbor_to_vec(&config);
+        let decoded: Outer = ciborium::from_reader(bytes.as_slice()).unwrap();
         assert_eq!(decoded, config);
     }
 }

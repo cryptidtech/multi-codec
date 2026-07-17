@@ -1,6 +1,6 @@
 [package]
 name = "multi-codec"
-version = "1.0.4"
+version = "1.0.5"
 edition = "2024"
 rust-version = "1.85"
 authors = ["Benjamin Kampmann <ben@gnunicorn.org>", "Dave Grantham <dwg@linuxprogrammer.org>"]
@@ -22,10 +22,10 @@ thiserror = { version = "2.0", default-features = false }
 serde = { version = "1.0", default-features = false, optional = true, features = ["serde_derive"] }
 
 [dev-dependencies]
+ciborium = "0.2"
 criterion = { version = "0.8", features = ["html_reports"] }
 hex = "0.4"
 proptest = "1.4"
-serde_cbor = "0.11"
 serde_json = "1.0"
 serde_test = "1.0"
 unsigned-varint = { version = "0.8", features = ["std"] }

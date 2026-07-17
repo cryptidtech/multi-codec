@@ -14,6 +14,13 @@
 use multi_codec::Codec;
 use multi_trait::{Null, TryDecodeFrom};
 
+/// Serialize a value to CBOR bytes using `ciborium`.
+fn cbor_to_vec<T: serde::Serialize>(value: &T) -> Vec<u8> {
+    let mut buf = Vec::new();
+    ciborium::into_writer(value, &mut buf).expect("CBOR serialize");
+    buf
+}
+
 /// Test identity codec (0x00) - the default
 #[test]
 fn test_identity_codec() {
@@ -274,8 +281,8 @@ mod serde_edge_cases {
         assert_eq!(decoded, Codec::Identity);
 
         // CBOR (binary)
-        let bytes = serde_cbor::to_vec(&codec).unwrap();
-        let decoded: Codec = serde_cbor::from_slice(&bytes).unwrap();
+        let bytes = cbor_to_vec(&codec);
+        let decoded: Codec = ciborium::from_reader(bytes.as_slice()).unwrap();
         assert_eq!(decoded, Codec::Identity);
     }
 
@@ -291,8 +298,8 @@ mod serde_edge_cases {
             assert_eq!(decoded, codec);
 
             // CBOR roundtrip
-            let bytes = serde_cbor::to_vec(&codec).unwrap();
-            let decoded: Codec = serde_cbor::from_slice(&bytes).unwrap();
+            let bytes = cbor_to_vec(&codec);
+            let decoded: Codec = ciborium::from_reader(bytes.as_slice()).unwrap();
             assert_eq!(decoded, codec);
         }
     }
