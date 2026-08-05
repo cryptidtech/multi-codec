@@ -101,22 +101,29 @@ macro_rules! build_codec_enum {
             }
         }
 
-        /// Try to deserialize a [`Codec`] from the unsigned varint at the start
-        /// of `bytes`.
+        /// Try to deserialize a [`Codec`] from the unsigned varint at the
+        /// start of `bytes`.
         ///
-        /// # Warning
+        /// # Trailing data
         ///
-        /// This discards any bytes following the varint. Callers parsing a
-        /// multicodec-tagged stream that may contain trailing data should use
+        /// This impl requires `bytes` to contain exactly one varint and
+        /// **nothing else**. Any bytes following the codec varint are
+        /// rejected with [`Error::TrailingData`] so that callers do not
+        /// silently drop trailing data. Callers parsing a multicodec-tagged
+        /// stream that may contain trailing data should use
         /// [`TryDecodeFrom`] (via [`Codec::try_decode_from`]) instead, which
-        /// returns both the codec and the remaining slice. The `TryFrom` impl
-        /// is only appropriate when `bytes` is expected to contain exactly one
-        /// varint and nothing else.
+        /// returns both the codec and the remaining slice.
         impl<'a> TryFrom<&'a [u8]> for Codec {
             type Error = Error;
 
             fn try_from(bytes: &'a [u8]) -> Result<Codec, Error> {
-                let (code, _) = u64::try_decode_from(bytes)?;
+                let (code, rest) = u64::try_decode_from(bytes)?;
+                if !rest.is_empty() {
+                    return Err(Error::TrailingData {
+                        consumed: bytes.len() - rest.len(),
+                        remaining: rest.len(),
+                    });
+                }
                 Codec::try_from(code)
             }
         }
@@ -307,6 +314,62 @@ mod tests {
     #[should_panic = "InvalidName"]
     fn test_invalid_name() {
         Codec::try_from("move-zig").unwrap();
+    }
+
+    // ------------------------------------------------------------------
+    // M6: TryFrom<&[u8]> rejects trailing bytes
+    // ------------------------------------------------------------------
+
+    #[test]
+    fn test_try_from_bytes_no_trailing_ok() {
+        // A single-varint buffer with no trailing bytes is accepted.
+        let encoded: Vec<u8> = Codec::Sha2256.into();
+        let codec = Codec::try_from(encoded.as_slice()).expect("no trailing");
+        assert_eq!(codec, Codec::Sha2256);
+    }
+
+    #[test]
+    fn test_try_from_bytes_trailing_rejected() {
+        // A varint followed by extra bytes must be rejected with
+        // TrailingData rather than silently discarding the remainder.
+        let mut encoded: Vec<u8> = Codec::Ed25519Pub.into();
+        encoded.extend_from_slice(&[0xAA, 0xBB, 0xCC]);
+
+        match Codec::try_from(encoded.as_slice()) {
+            Err(Error::TrailingData {
+                consumed,
+                remaining,
+            }) => {
+                assert_eq!(consumed, 2); // Ed25519Pub varint is 2 bytes
+                assert_eq!(remaining, 3);
+            }
+            other => panic!("expected TrailingData, got {other:?}"),
+        }
+    }
+
+    #[test]
+    fn test_try_from_bytes_trailing_single_byte_rejected() {
+        // Even a single trailing byte is rejected.
+        let mut encoded: Vec<u8> = Codec::Identity.into();
+        encoded.push(0x42);
+
+        let result = Codec::try_from(encoded.as_slice());
+        assert!(matches!(
+            result,
+            Err(Error::TrailingData { remaining: 1, .. })
+        ));
+    }
+
+    #[test]
+    fn test_try_decode_from_still_returns_trailing() {
+        // The TryDecodeFrom impl is unaffected: it returns the remaining
+        // slice so callers can continue parsing a stream.
+        let mut encoded: Vec<u8> = Codec::Ed25519Pub.into();
+        encoded.extend_from_slice(&[0xAA, 0xBB]);
+
+        let (codec, rest) = Codec::try_decode_from(&encoded).expect("decode");
+        assert_eq!(codec, Codec::Ed25519Pub);
+        assert_eq!(rest, &[0xAA, 0xBB]);
     }
 }
 

@@ -220,7 +220,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! multi-codec = { version = "1.0", default-features = false }
+//! multi-codec = { version = "1.1", default-features = false }
 //! ```
 //!
 //! This drops the `std` and `serde` features. To use serde under `no_std`,
@@ -228,7 +228,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! multi-codec = { version = "1.0", default-features = false, features = ["serde"] }
+//! multi-codec = { version = "1.1", default-features = false, features = ["serde"] }
 //! ```
 //!
 //! ## Common Patterns

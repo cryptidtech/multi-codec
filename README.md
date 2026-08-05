@@ -9,20 +9,13 @@
 
 # multi-codec
 
-Rust implementation of the [multicodec](https://github.com/multiformats/multicodec)
-specification for self-describing protocol and encoding identifiers.
+Rust implementation of the [multicodec](https://github.com/multiformats/multicodec) specification. The crate provides self-describing protocol and encoding identifiers.
 
 ## Overview
 
-Multicodec is a self-describing multiformat that provides a way to uniquely
-identify protocols, encodings, cryptographic algorithms, and other systems.
-Each codec has a unique numeric identifier (code), a human-readable name, and a
-canonical string representation.
+Multicodec is a self-describing multiformat. It identifies protocols, encodings, cryptographic algorithms, and other systems. Each codec has a unique numeric identifier (code), a human-readable name, and a canonical string representation.
 
-This crate provides the `Codec` enum with 570+ variants representing all
-standardized multicodec identifiers from the official specification. The enum
-and its conversions are generated at build time from `table.csv`, which is kept
-in sync with the [official multicodec table](https://github.com/multiformats/multicodec/blob/master/table.csv).
+This crate provides the `Codec` enum with 570+ variants. The variants represent all standardized multicodec identifiers from the official specification. A build script generates the enum and its conversions from `table.csv`. The crate keeps `table.csv` in sync with the [official multicodec table](https://github.com/multiformats/multicodec/blob/master/table.csv).
 
 ## Table of Contents
 
@@ -47,14 +40,14 @@ in sync with the [official multicodec table](https://github.com/multiformats/mul
 
 ## Features
 
-- **570+ Codec Variants**: All standardized multicodec identifiers
-- **Type-Safe Conversions**: `TryFrom`/`Into` for all numeric types and strings
-- **Serde Support**: JSON and binary serialization (feature-gated)
-- **`no_std` Support**: Works in `no_std` environments with `alloc`
-- **Zero Unsafe Code**: `#![deny(unsafe_code)]` enforced at compile time
-- **Thread-Safe**: All types are `Send + Sync`
-- **Type-Safe Newtypes**: `CodecCode` and `CodecName` wrappers
-- **Varint Encoding**: Encodes codecs as unsigned varints via `multi-trait`
+- 570+ codec variants. All standardized multicodec identifiers.
+- Type-safe conversions. `TryFrom` and `Into` for all numeric types and strings.
+- Serde support. JSON and binary serialization. The `serde` feature gates it.
+- `no_std` support. The crate works in `no_std` environments with `alloc`.
+- Zero unsafe code. `#![deny(unsafe_code)]` is set at the crate root.
+- Thread-safe. All types are `Send + Sync`.
+- Type-safe newtypes. `CodecCode` and `CodecName` wrappers.
+- Varint encoding. The crate encodes codecs as unsigned varints via `multi-trait`.
 
 ## Install
 
@@ -62,24 +55,24 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-multi-codec = "1.0"
+multi-codec = "1.1"
 ```
 
-For `no_std` environments (disable `std` and `serde`):
+For `no_std` environments, disable `std` and `serde`:
 
 ```toml
 [dependencies]
-multi-codec = { version = "1.0", default-features = false }
+multi-codec = { version = "1.1", default-features = false }
 ```
 
 To use serde under `no_std`, enable only the `serde` feature:
 
 ```toml
 [dependencies]
-multi-codec = { version = "1.0", default-features = false, features = ["serde"] }
+multi-codec = { version = "1.1", default-features = false, features = ["serde"] }
 ```
 
-**MSRV**: Rust 1.85 (Edition 2024)
+MSRV: Rust 1.85 (Edition 2024).
 
 ## Usage
 
@@ -101,7 +94,7 @@ assert_eq!(format!("{:?}", codec), "ed25519-pub (0xed)");
 
 ### Encoding and Decoding
 
-Codecs encode as unsigned varints via the `multi-trait` crate:
+The crate encodes codecs as unsigned varints via the `multi-trait` crate:
 
 ```rust
 use multi_codec::Codec;
@@ -152,9 +145,7 @@ match Codec::try_from(-1i64) {
 
 ### Serde Integration
 
-With the `serde` feature (enabled by default), `Codec` serializes as a string in
-human-readable formats (JSON, TOML) and as varint bytes in binary formats (CBOR,
-bincode):
+With the `serde` feature on by default, `Codec` serializes as a string in human-readable formats (JSON, TOML). It serializes as varint bytes in binary formats (CBOR, bincode):
 
 ```rust
 use multi_codec::Codec;
@@ -171,7 +162,7 @@ let info = SignatureInfo {
     public_key: vec![1, 2, 3, 4],
 };
 
-// Serialize to JSON (human-readable → codec name string)
+// Serialize to JSON (human-readable - codec name string)
 let json = serde_json::to_string(&info)?;
 assert!(json.contains("ed25519-pub"));
 
@@ -227,7 +218,7 @@ assert!(!name.is_identity());
 
 ### Sequential Codec Handling
 
-Multiple codecs can be encoded into a single buffer and decoded back in order:
+You can encode multiple codecs into one buffer and decode them back in order:
 
 ```rust
 use multi_codec::Codec;
@@ -267,8 +258,7 @@ cargo run --example uvi -- -d ac02
 
 ## Testing
 
-The crate has 160 tests across unit, integration, property-based, security, and
-doc-test suites:
+The crate has 160 tests across unit, integration, property-based, security, and doc-test suites:
 
 ```bash
 # Run all tests
@@ -297,42 +287,35 @@ cargo clippy --all-targets --all-features -- -D warnings
 
 ## Updating the Codec Table
 
-The codec enum is generated at build time from `table.csv` at the crate root.
-The build script (`build.rs`) parses the CSV, validates that all codes and
-names are unique, and emits the `src/table_gen.rs` file that is included into
-`src/codec.rs`.
+A build script generates the codec enum from `table.csv` at the crate root. The build script `build.rs` parses the CSV. It checks that all codes and names are unique. It emits `src/table_gen.rs`, which the build includes into `src/codec.rs`.
 
 To update the table:
 
-1. Replace `table.csv` with the latest version from the
-   [official multicodec repository](https://github.com/multiformats/multicodec/blob/master/table.csv)
-   (or apply your local additions).
-2. Run `cargo build` — the build script will regenerate `src/table_gen.rs`.
-3. Run `cargo test` to verify the new codecs work correctly.
+1. Replace `table.csv` with the latest version from the [official multicodec repository](https://github.com/multiformats/multicodec/blob/master/table.csv). You can also apply your local additions.
+2. Run `cargo build`. The build script regenerates `src/table_gen.rs`.
+3. Run `cargo test` to make sure the new codecs work.
 
-If the CSV contains duplicate codes or names, the build will fail with an error
-identifying the offending row.
+If the CSV has duplicate codes or names, the build fails. The error names the offending row.
 
 ## Feature Flags
 
-- **`serde`** (default): Enables serde serialization/deserialization. When
-  enabled, `Codec` implements `Serialize` and `Deserialize` — strings in
-  human-readable formats, varint bytes in binary formats.
+- `serde` (default). Enables serde serialization and deserialization. When on, `Codec` implements `Serialize` and `Deserialize`. Strings are used in human-readable formats. Varint bytes are used in binary formats.
 
 ### Disabling Default Features
 
 ```toml
 [dependencies]
-multi-codec = { version = "1.0", default-features = false }
+multi-codec = { version = "1.1", default-features = false }
 ```
 
 ## Security
 
-- `#![deny(unsafe_code)]` enforced at compile time
-- All conversions validate input ranges; negative signed integers are rejected
-- Deserialization has a 19-byte size limit on varint input (DoS protection)
-- All errors return `Result` types — no panics on invalid input
-- All types are `Send + Sync` with no shared mutable state
+- `#![deny(unsafe_code)]` is set at the crate root.
+- All conversions check input ranges. Negative signed integers are rejected.
+- Deserialization rejects varint input longer than 19 bytes. This protects against DoS.
+- `TryFrom<&[u8]>` rejects trailing bytes after the codec varint. It returns `Error::TrailingData`. This prevents silent data loss. Use `Codec::try_decode_from` to parse from a stream with trailing data.
+- All errors return `Result`. No path panics on invalid input.
+- All types are `Send + Sync` with no shared mutable state.
 
 ## Maintainers
 
@@ -342,16 +325,16 @@ Original author: [@gnunicorn](https://github.com/gnunicorn).
 
 ## Contribute
 
-Contributions welcome! Please check out [the issues](https://github.com/cryptidtech/multi-codec/issues).
+Contributions are welcome. Please check out [the issues](https://github.com/cryptidtech/multi-codec/issues).
 
 ### Development Guidelines
 
-- Run `cargo fmt` before committing
-- Run `cargo clippy -- -D warnings` to check for issues
-- Add tests for new features
-- Update documentation for API changes
-- Run the full test suite: `cargo test --all-features`
+- Run `cargo fmt` before you commit.
+- Run `cargo clippy -- -D warnings` to check for issues.
+- Add tests for new features.
+- Update documentation for API changes.
+- Run the full test suite: `cargo test --all-features`.
 
 ## License
 
-[MIT OR Apache-2.0](LICENSE) © Cryptid Technologies
+[MIT OR Apache-2.0](LICENSE) (c) Cryptid Technologies

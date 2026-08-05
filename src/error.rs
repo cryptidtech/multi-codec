@@ -149,6 +149,32 @@ pub enum Error {
         /// The negative value that was provided
         value: i64,
     },
+
+    /// Trailing bytes after the codec varint
+    ///
+    /// `TryFrom<&[u8]>` requires the input to contain exactly one varint and
+    /// nothing else. Bytes following the codec varint are rejected so that
+    /// callers do not silently drop trailing data. To parse a codec from a
+    /// stream that may contain trailing data, use
+    /// [`Codec::try_decode_from`](crate::Codec::try_decode_from) (the
+    /// [`TryDecodeFrom`](multi_trait::TryDecodeFrom) impl), which returns both
+    /// the codec and the remaining slice.
+    ///
+    /// # Context
+    ///
+    /// - `consumed`: The number of bytes consumed by the codec varint
+    /// - `remaining`: The number of bytes left in the input after the varint
+    #[error(
+        "trailing data after codec varint: {consumed} byte(s) consumed, {remaining} byte(s) left\n\
+             `TryFrom<&[u8]>` requires exactly one varint with no trailing bytes. \
+             Use `Codec::try_decode_from` to parse a codec from a stream with trailing data."
+    )]
+    TrailingData {
+        /// The number of bytes consumed by the codec varint
+        consumed: usize,
+        /// The number of bytes remaining in the input after the varint
+        remaining: usize,
+    },
 }
 
 impl Error {
@@ -223,6 +249,7 @@ impl Error {
             Self::InvalidName { .. } => "InvalidName",
             Self::InvalidValue { .. } => "InvalidValue",
             Self::NegativeValue { .. } => "NegativeValue",
+            Self::TrailingData { .. } => "TrailingData",
         }
     }
 
@@ -247,6 +274,10 @@ impl Error {
             Self::InvalidName { name } => format!("Invalid name: '{name}'"),
             Self::InvalidValue { code } => format!("Invalid code: 0x{code:x} ({code})"),
             Self::NegativeValue { value } => format!("Negative value: {value}"),
+            Self::TrailingData {
+                consumed,
+                remaining,
+            } => format!("Trailing data: {consumed} consumed, {remaining} remaining"),
         }
     }
 }
