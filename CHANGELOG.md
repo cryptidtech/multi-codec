@@ -5,6 +5,18 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-08-13
+
+### Added
+
+- Synced the multicodec table from the BetterSign workspace. This adds 65 new codec entries: full Lamport signature variants (SHA2-256/384/512, BLAKE2b-512, BLAKE2s-256, BLAKE3-256, SHAKE-128/256 for Pub/Priv/PrivShare/Sig/SigShare), XMSS variants (SHA2-10/16/20-256 for Pub/Priv/Msig), additional McEliece variants, HQC key variants, SLH-DSA key variants, and other PQC codec entries that were in the workspace but not in the published crate.
+- The `Codec` enum now has 827 variants (up from 762).
+
+### Notes
+
+- This is a minor version bump. The `Codec` enum is `#[non_exhaustive]`, so new variants are additive and do not break downstream match expressions.
+- This sync unblocks Lamport and XMSS signature support in `multi-sig` (Phase 8) and `multi-key` (Phase 9) of the crate extraction plan.
+
 ## [1.1.0] - 2026-07-29
 
 ### Security
