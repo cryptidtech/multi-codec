@@ -17,7 +17,7 @@ std = ["thiserror/std", "serde/std", "multi-trait/std"]
 serde = ["dep:serde"]
 
 [dependencies]
-multi-trait = { package = "bs-multitrait", version = "0.7.0", path = "../bettersign/crates/multitrait", default-features = false }
+multi-trait = { version = "1.0", default-features = false }
 thiserror = { version = "2.0", default-features = false }
 serde = { version = "1.0", default-features = false, optional = true, features = ["serde_derive"] }
 
