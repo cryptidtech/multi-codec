@@ -394,6 +394,61 @@ lamport-shake-128-sig,          multisig,       0x1a4d,         draft,      Lamp
 lamport-shake-256-sig,          multisig,       0x1a4e,         draft,      Lamport signature based on SHAKE256 (512-bit XOF output)
 lamport-shake-128-sig-share,    multisig,       0x1a5d,         draft,      Lamport signature share based on SHAKE128 and split with Shamir gf256
 lamport-shake-256-sig-share,    multisig,       0x1a5e,         draft,      Lamport signature share based on SHAKE256 and split with Shamir gf256
+lamport-merkle-sha3-512-pub,    key,            0x1a64,         draft,      LamportMerkle public key based on SHA3-512
+lamport-merkle-sha3-384-pub,    key,            0x1a65,         draft,      LamportMerkle public key based on SHA3-384
+lamport-merkle-sha3-256-pub,    key,            0x1a66,         draft,      LamportMerkle public key based on SHA3-256
+lamport-merkle-sha2-512-pub,    key,            0x1a67,         draft,      LamportMerkle public key based on SHA2-512
+lamport-merkle-sha2-384-pub,    key,            0x1a68,         draft,      LamportMerkle public key based on SHA2-384
+lamport-merkle-sha2-256-pub,    key,            0x1a69,         draft,      LamportMerkle public key based on SHA2-256
+lamport-merkle-blake2b-512-pub, key,            0x1a6a,         draft,      LamportMerkle public key based on BLAKE2b-512
+lamport-merkle-blake2s-256-pub, key,            0x1a6b,         draft,      LamportMerkle public key based on BLAKE2s-256
+lamport-merkle-blake3-256-pub,  key,            0x1a6c,         draft,      LamportMerkle public key based on BLAKE3-256
+lamport-merkle-shake-128-pub,   key,            0x1a6d,         draft,      LamportMerkle public key based on SHAKE128
+lamport-merkle-shake-256-pub,   key,            0x1a6e,         draft,      LamportMerkle public key based on SHAKE256
+lamport-merkle-sha3-512-priv,   key,            0x1a74,         draft,      LamportMerkle private key based on SHA3-512
+lamport-merkle-sha3-384-priv,   key,            0x1a75,         draft,      LamportMerkle private key based on SHA3-384
+lamport-merkle-sha3-256-priv,   key,            0x1a76,         draft,      LamportMerkle private key based on SHA3-256
+lamport-merkle-sha2-512-priv,   key,            0x1a77,         draft,      LamportMerkle private key based on SHA2-512
+lamport-merkle-sha2-384-priv,   key,            0x1a78,         draft,      LamportMerkle private key based on SHA2-384
+lamport-merkle-sha2-256-priv,   key,            0x1a79,         draft,      LamportMerkle private key based on SHA2-256
+lamport-merkle-blake2b-512-priv, key,            0x1a7a,         draft,      LamportMerkle private key based on BLAKE2b-512
+lamport-merkle-blake2s-256-priv, key,            0x1a7b,         draft,      LamportMerkle private key based on BLAKE2s-256
+lamport-merkle-blake3-256-priv, key,            0x1a7c,         draft,      LamportMerkle private key based on BLAKE3-256
+lamport-merkle-shake-128-priv,  key,            0x1a7d,         draft,      LamportMerkle private key based on SHAKE128
+lamport-merkle-shake-256-priv,  key,            0x1a7e,         draft,      LamportMerkle private key based on SHAKE256
+lamport-merkle-sha3-512-priv-share, key,            0x1a84,         draft,      LamportMerkle private key share based on SHA3-512 and split with Shamir gf256
+lamport-merkle-sha3-384-priv-share, key,            0x1a85,         draft,      LamportMerkle private key share based on SHA3-384 and split with Shamir gf256
+lamport-merkle-sha3-256-priv-share, key,            0x1a86,         draft,      LamportMerkle private key share based on SHA3-256 and split with Shamir gf256
+lamport-merkle-sha2-512-priv-share, key,            0x1a87,         draft,      LamportMerkle private key share based on SHA2-512 and split with Shamir gf256
+lamport-merkle-sha2-384-priv-share, key,            0x1a88,         draft,      LamportMerkle private key share based on SHA2-384 and split with Shamir gf256
+lamport-merkle-sha2-256-priv-share, key,            0x1a89,         draft,      LamportMerkle private key share based on SHA2-256 and split with Shamir gf256
+lamport-merkle-blake2b-512-priv-share, key,            0x1a8a,         draft,      LamportMerkle private key share based on BLAKE2b-512 and split with Shamir gf256
+lamport-merkle-blake2s-256-priv-share, key,            0x1a8b,         draft,      LamportMerkle private key share based on BLAKE2s-256 and split with Shamir gf256
+lamport-merkle-blake3-256-priv-share, key,            0x1a8c,         draft,      LamportMerkle private key share based on BLAKE3-256 and split with Shamir gf256
+lamport-merkle-shake-128-priv-share, key,            0x1a8d,         draft,      LamportMerkle private key share based on SHAKE128 and split with Shamir gf256
+lamport-merkle-shake-256-priv-share, key,            0x1a8e,         draft,      LamportMerkle private key share based on SHAKE256 and split with Shamir gf256
+lamport-merkle-sha3-512-sig,    multisig,       0x1a94,         draft,      LamportMerkle signature based on SHA3-512
+lamport-merkle-sha3-384-sig,    multisig,       0x1a95,         draft,      LamportMerkle signature based on SHA3-384
+lamport-merkle-sha3-256-sig,    multisig,       0x1a96,         draft,      LamportMerkle signature based on SHA3-256
+lamport-merkle-sha2-512-sig,    multisig,       0x1a97,         draft,      LamportMerkle signature based on SHA2-512
+lamport-merkle-sha2-384-sig,    multisig,       0x1a98,         draft,      LamportMerkle signature based on SHA2-384
+lamport-merkle-sha2-256-sig,    multisig,       0x1a99,         draft,      LamportMerkle signature based on SHA2-256
+lamport-merkle-blake2b-512-sig, multisig,       0x1a9a,         draft,      LamportMerkle signature based on BLAKE2b-512
+lamport-merkle-blake2s-256-sig, multisig,       0x1a9b,         draft,      LamportMerkle signature based on BLAKE2s-256
+lamport-merkle-blake3-256-sig,  multisig,       0x1a9c,         draft,      LamportMerkle signature based on BLAKE3-256
+lamport-merkle-shake-128-sig,   multisig,       0x1a9d,         draft,      LamportMerkle signature based on SHAKE128
+lamport-merkle-shake-256-sig,   multisig,       0x1a9e,         draft,      LamportMerkle signature based on SHAKE256
+lamport-merkle-sha3-512-sig-share, multisig,       0x1aa4,         draft,      LamportMerkle signature share based on SHA3-512 and split with Shamir gf256
+lamport-merkle-sha3-384-sig-share, multisig,       0x1aa5,         draft,      LamportMerkle signature share based on SHA3-384 and split with Shamir gf256
+lamport-merkle-sha3-256-sig-share, multisig,       0x1aa6,         draft,      LamportMerkle signature share based on SHA3-256 and split with Shamir gf256
+lamport-merkle-sha2-512-sig-share, multisig,       0x1aa7,         draft,      LamportMerkle signature share based on SHA2-512 and split with Shamir gf256
+lamport-merkle-sha2-384-sig-share, multisig,       0x1aa8,         draft,      LamportMerkle signature share based on SHA2-384 and split with Shamir gf256
+lamport-merkle-sha2-256-sig-share, multisig,       0x1aa9,         draft,      LamportMerkle signature share based on SHA2-256 and split with Shamir gf256
+lamport-merkle-blake2b-512-sig-share, multisig,       0x1aaa,         draft,      LamportMerkle signature share based on BLAKE2b-512 and split with Shamir gf256
+lamport-merkle-blake2s-256-sig-share, multisig,       0x1aab,         draft,      LamportMerkle signature share based on BLAKE2s-256 and split with Shamir gf256
+lamport-merkle-blake3-256-sig-share, multisig,       0x1aac,         draft,      LamportMerkle signature share based on BLAKE3-256 and split with Shamir gf256
+lamport-merkle-shake-128-sig-share, multisig,       0x1aad,         draft,      LamportMerkle signature share based on SHAKE128 and split with Shamir gf256
+lamport-merkle-shake-256-sig-share, multisig,       0x1aae,         draft,      LamportMerkle signature share based on SHAKE256 and split with Shamir gf256
 kangarootwelve,                 multihash,      0x1d01,         draft,      KangarooTwelve is an extendable-output hash function based on Keccak-p
 aes-gcm-256,                    encryption,     0x2000,         draft,      AES Galois/Counter Mode with 256-bit key and 12-byte IV
 aes-gcm-128,                    encryption,     0x2001,         draft,      AES Galois/Counter Mode with 128-bit key and 12-byte IV
