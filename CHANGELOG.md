@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-09-01
+
+### Added
+
+- 55 new codec entries for merkle-tree Lamport signatures (`lamport-merkle-*`): SHA3-512/384/256, SHA2-512/384/256, BLAKE2b-512, BLAKE2s-256, BLAKE3-256, and SHAKE-128/256 across five categories per digest — Pub (`0x1a64`-`0x1a6e`), Priv (`0x1a74`-`0x1a7e`), PrivShare (`0x1a84`-`0x1a8e`), Sig (`0x1a94`-`0x1a9e`), and SigShare (`0x1aa4`-`0x1aae`).
+- The `Codec` enum now has 882 variants (up from 827).
+
 ## [1.2.1] - 2026-08-17
 
 - Fix the `multi-trait` dependency to use published crate.
