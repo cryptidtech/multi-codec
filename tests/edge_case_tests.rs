@@ -150,7 +150,7 @@ fn test_identity_encoding() {
     // Decode back
     let (decoded, remaining) = Codec::try_decode_from(&encoded).unwrap();
     assert_eq!(decoded, Codec::Identity);
-    assert!(remaining.is_empty());
+    assert_eq!(remaining.len(), 0);
 }
 
 /// Test decoding with no remaining bytes
@@ -161,7 +161,6 @@ fn test_decode_exact_length() {
 
     let (decoded, remaining) = Codec::try_decode_from(&encoded).unwrap();
     assert_eq!(decoded, codec);
-    assert!(remaining.is_empty());
     assert_eq!(remaining.len(), 0);
 }
 

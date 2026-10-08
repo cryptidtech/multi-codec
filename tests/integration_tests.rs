@@ -28,12 +28,12 @@ fn test_full_encode_decode_cycle() {
 
     // Encode to bytes
     let bytes: Vec<u8> = original.into();
-    assert!(!bytes.is_empty());
+    assert_ne!(bytes, Vec::<u8>::new());
 
     // Decode from bytes
     let (decoded, remaining) = Codec::try_decode_from(&bytes).unwrap();
     assert_eq!(decoded, original);
-    assert!(remaining.is_empty());
+    assert_eq!(remaining.len(), 0);
 
     // Verify code matches
     assert_eq!(decoded.code(), original.code());
@@ -175,12 +175,12 @@ fn test_multitrait_integration() {
 
     // Convert to Vec<u8> which uses EncodeInto internally
     let encoded: Vec<u8> = codec.into();
-    assert!(!encoded.is_empty());
+    assert_ne!(encoded, Vec::<u8>::new());
 
     // Use TryDecodeFrom from multitrait
     let (decoded, remaining) = Codec::try_decode_from(&encoded).unwrap();
     assert_eq!(decoded, codec);
-    assert!(remaining.is_empty());
+    assert_eq!(remaining.len(), 0);
 }
 
 /// Test error types in real-world scenarios
@@ -262,7 +262,7 @@ fn test_sequential_encoding() {
         remaining = rest;
     }
 
-    assert!(remaining.is_empty());
+    assert_eq!(remaining.len(), 0);
 }
 
 /// Test codec with pattern matching

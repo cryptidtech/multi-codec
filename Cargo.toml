@@ -2,7 +2,7 @@
 name = "multi-codec"
 version = "1.5.0"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.99"
 authors = ["Benjamin Kampmann <ben@gnunicorn.org>", "Dave Grantham <dwg@linuxprogrammer.org>"]
 description = "Implementation of the Multicodec specification"
 repository = "https://github.com/cryptidtech/multi-codec.git"
