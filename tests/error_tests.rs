@@ -142,17 +142,17 @@ fn test_error_context_for_debugging() {
     let err = Error::invalid_name("test-codec");
     let context = err.context();
     assert!(context.contains("test-codec"));
-    assert!(!context.is_empty());
+    assert_ne!(context, "");
 
     let err = Error::invalid_value(0x123);
     let context = err.context();
     assert!(context.contains("0x123") || context.contains("123") || context.contains("291"));
-    assert!(!context.is_empty());
+    assert_ne!(context, "");
 
     let err = Error::negative_value(-100);
     let context = err.context();
     assert!(context.contains("-100"));
-    assert!(!context.is_empty());
+    assert_ne!(context, "");
 }
 
 /// Test that error types can be matched on
@@ -210,17 +210,17 @@ fn test_error_trait_impl() {
 fn test_error_display_informative() {
     let err = Error::invalid_name("bad-name");
     let display = format!("{err}");
-    assert!(!display.is_empty());
+    assert_ne!(display, "");
     assert!(display.len() > 20); // Should be a full sentence, not just a few words
 
     let err = Error::invalid_value(999);
     let display = format!("{err}");
-    assert!(!display.is_empty());
+    assert_ne!(display, "");
     assert!(display.len() > 20);
 
     let err = Error::negative_value(-10);
     let display = format!("{err}");
-    assert!(!display.is_empty());
+    assert_ne!(display, "");
     assert!(display.len() > 20);
 }
 
@@ -229,6 +229,6 @@ fn test_error_display_informative() {
 fn test_error_debug_output() {
     let err = Error::invalid_name("test");
     let debug = format!("{err:?}");
-    assert!(!debug.is_empty());
+    assert_ne!(debug, "");
     assert!(debug.contains("InvalidName") || debug.contains("test"));
 }
