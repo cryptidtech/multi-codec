@@ -5,7 +5,12 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.6.0] - 2026-10-08
+
+### Changed
+
+- Raised `rust-version` from 1.85 to 1.99. The CI MSRV job pins 1.99.0 and the README MSRV line reads 1.99. A minor release carries this change: a raised MSRV is possibly breaking per the Cargo book rules.
+- Fixed the clippy 0.1.99 `assert_is_empty` findings in the edge-case, error, and integration test suites. `CodecName::len` and `CodecName::is_empty` are now `const fn`. The API changes are additive. No public item was removed or renamed.
 
 ## [1.5.0] - 2026-09-14
 
@@ -197,6 +202,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Moved `CodecInfo` and `EncodingInfo` to the `multi-util` crate.
 - Cleaned up imports and exports.
 
+[1.6.0]: https://github.com/cryptidtech/multi-codec/compare/v1.5.0...v1.6.0
 [1.1.0]: https://github.com/cryptidtech/multi-codec/compare/v1.0.5...v1.1.0
 [1.0.5]: https://github.com/cryptidtech/multi-codec/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/cryptidtech/multi-codec/compare/v1.0.3...v1.0.4
