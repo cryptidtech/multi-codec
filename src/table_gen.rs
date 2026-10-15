@@ -867,8 +867,6 @@ build_codec_enum! {
 	0xd0132e => (XmssSha220256Msig, "xmss-sha2-20-256-msig"),
 	0xd0132f => (Ed448Msig, "ed448-msig"),
 	0xd01332 => (XeddsaMsig, "xeddsa-msig"),
-	0xd01330 => (Multiproof, "multiproof"),
-	0xd01331 => (WaccScriptWithPop, "wacc-script-with-pop"),
 	0xd01400 => (BsMessage, "bs-message"),
 	0xd02000 => (Scion, "scion"),
 	0xd03000 => (Ed25519ThreshPrivShare, "ed25519-thresh-priv-share"),
@@ -884,4 +882,7 @@ build_codec_enum! {
 	0xd0300a => (Ed448ThreshPrivShare, "ed448-thresh-priv-share"),
 	0xd0300b => (Ed448ThreshPubShare, "ed448-thresh-pub-share"),
 	0xd0300c => (KeySplitShare, "key-split-share"),
+	0xd04000 => (MultiproofProver, "multiproof-prover"),
+	0xd04001 => (MultiproofEvidence, "multiproof-evidence"),
+	0xd04002 => (MultiproofVerifier, "multiproof-verifier"),
 }

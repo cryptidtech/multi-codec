@@ -5,6 +5,22 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-10-15
+
+### Removed
+
+- BREAKING. The `multiproof` codec (`0xd01330`, multiformat). The statement container retired. The self-describing evidence now lives in `multiproof-evidence` (`0xd04001`).
+- BREAKING. The `wacc-script-with-pop` codec (`0xd01331`, multiformat). The script container split into `multiproof-prover` (`0xd04000`) and `multiproof-verifier` (`0xd04002`).
+
+### Added
+
+- Three codec entries for the multiproof script containers: `multiproof-prover` (`0xd04000`, multiformat), `multiproof-evidence` (`0xd04001`, multiformat), and `multiproof-verifier` (`0xd04002`, multiformat). The prover and verifier containers carry one wasm component script each. The evidence container carries the ordered attribute table, the proof-specific data, the kind identifier, and the position attributes.
+- The `Codec` enum now has 886 variants (up from 885).
+
+### Notes
+
+- This is a major version bump. Removal of previously allocated codec values is a breaking change. Values that carry the removed codes no longer decode to a valid codec.
+
 ## [1.6.0] - 2026-10-08
 
 ### Changed
@@ -202,6 +218,7 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 - Moved `CodecInfo` and `EncodingInfo` to the `multi-util` crate.
 - Cleaned up imports and exports.
 
+[2.0.0]: https://github.com/cryptidtech/multi-codec/compare/v1.6.0...v2.0.0
 [1.6.0]: https://github.com/cryptidtech/multi-codec/compare/v1.5.0...v1.6.0
 [1.1.0]: https://github.com/cryptidtech/multi-codec/compare/v1.0.5...v1.1.0
 [1.0.5]: https://github.com/cryptidtech/multi-codec/compare/v1.0.4...v1.0.5

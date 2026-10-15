@@ -42,6 +42,35 @@ fn test_full_encode_decode_cycle() {
     assert_eq!(decoded.as_str(), original.as_str());
 }
 
+/// Round-trip the multiproof prover, evidence, and verifier codecs through
+/// name, code, and byte conversions
+#[test]
+fn test_multiproof_script_codecs_roundtrip() {
+    let cases = [
+        (Codec::MultiproofProver, "multiproof-prover", 0xd04000),
+        (Codec::MultiproofEvidence, "multiproof-evidence", 0xd04001),
+        (Codec::MultiproofVerifier, "multiproof-verifier", 0xd04002),
+    ];
+
+    for (codec, name, code) in cases {
+        assert_eq!(codec.code(), code);
+        assert_eq!(codec.as_str(), name);
+
+        // Name lookup finds the codec
+        assert_eq!(Codec::try_from(name).unwrap(), codec);
+
+        // Code lookup finds the codec
+        assert_eq!(Codec::try_from(code).unwrap(), codec);
+
+        // Byte encoding decodes back with no trailing data
+        let bytes: Vec<u8> = codec.into();
+        let (decoded, remaining) = Codec::try_decode_from(&bytes).unwrap();
+        assert_eq!(decoded.code(), code);
+        assert_eq!(decoded.as_str(), name);
+        assert_eq!(remaining.len(), 0);
+    }
+}
+
 /// Test conversion chain: name -> codec -> code -> codec -> name
 #[test]
 fn test_conversion_chain() {

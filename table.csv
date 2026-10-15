@@ -867,8 +867,6 @@ xmss-sha2-16-256-msig,          multisig,       0xd0132d,       draft,      XMSS
 xmss-sha2-20-256-msig,          multisig,       0xd0132e,       draft,      XMSS-SHA2_20_256 signature as Multisig; RFC 8391
 ed448-msig,                     multisig,       0xd0132f,       draft,      Ed448 (EdDSA) signature as Multisig; RFC 8032
 xeddsa-msig,                    multisig,       0xd01332,       draft,      XEdDSA signature over an X25519 key
-multiproof,                     multiformat,    0xd01330,       draft,      Multiproof proof-of-possession object
-wacc-script-with-pop,           multiformat,    0xd01331,       draft,      WACC script with proof-of-possession envelope
 bs-message,                     multiformat,    0xd01400,       draft,      BetterSign signed+encrypted message multiformat
 scion,                          multiaddr,      0xd02000,       draft,      SCION Internet architecture
 ed25519-thresh-priv-share,      key,            0xd03000,       draft,      Ed25519 FROST DKG threshold private key share
@@ -884,3 +882,6 @@ bls12-381-thresh-pub-share,     key,            0xd03009,       draft,      BLS1
 ed448-thresh-priv-share,        key,            0xd0300a,       draft,      Ed448 FROST DKG threshold private key share
 ed448-thresh-pub-share,         key,            0xd0300b,       draft,      Ed448 FROST DKG threshold public key share
 key-split-share,                key,            0xd0300c,       draft,      Generic verifiable private key split share (Feldman VSS or gf256)
+multiproof-prover,              multiformat,    0xd04000,       draft,      Multiproof prover (unlock) script container
+multiproof-evidence,            multiformat,    0xd04001,       draft,      Multiproof self-describing evidence container
+multiproof-verifier,            multiformat,    0xd04002,       draft,      Multiproof verifier (lock) script container
