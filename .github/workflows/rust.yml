@@ -11,7 +11,7 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
 
     steps:
       - uses: actions/checkout@v4
@@ -35,7 +35,7 @@ jobs:
 
   msrv:
     name: Verify MSRV (1.99)
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
 
     steps:
       - uses: actions/checkout@v4
@@ -48,7 +48,7 @@ jobs:
 
   ensure_no_std:
     name: Ensure no_std
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
 
     steps:
       - uses: actions/checkout@v4
@@ -64,7 +64,7 @@ jobs:
 
   coverage:
     name: Coverage
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
 
     steps:
       - uses: actions/checkout@v4
@@ -75,7 +75,7 @@ jobs:
           components: llvm-tools-preview
 
       - name: Install cargo-llvm-cov
-        run: cargo install cargo-llvm-cov
+        run: command -v cargo-llvm-cov >/dev/null 2>&1 || cargo install cargo-llvm-cov
 
       - name: Run coverage
         run: cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
@@ -88,7 +88,7 @@ jobs:
 
   audit:
     name: Security Audit
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64]
 
     steps:
       - uses: actions/checkout@v4
@@ -97,7 +97,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Install cargo-audit
-        run: cargo install cargo-audit
+        run: command -v cargo-audit >/dev/null 2>&1 || cargo install cargo-audit
 
       - name: Run cargo audit
         run: cargo audit
