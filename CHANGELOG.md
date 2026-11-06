@@ -5,6 +5,12 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### CI
+
+- Added a macOS build job covering aarch64-apple-darwin and x86_64-apple-darwin on the self-hosted macOS runner pool.
+
 ## [2.0.0] - 2026-10-15
 
 ### Removed
