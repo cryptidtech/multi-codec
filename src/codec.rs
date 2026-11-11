@@ -16,7 +16,7 @@
 )]
 #![allow(missing_docs)]
 // Allow because variants are generated
-// The `build_codec_enum!` invocation in the included `table_gen.rs` contains
+// The `build_codec_enum!` invocation in the generated `table_gen.rs` contains
 // raw hex literals (e.g. `0xd03009`) for multicodec codes that clippy
 // `unreadable_literal` would flag. These are generated from the official
 // multicodec table and should not be hand-edited.
@@ -388,4 +388,4 @@ mod tests {
     }
 }
 
-include!("table_gen.rs");
+include!(concat!(env!("OUT_DIR"), "/table_gen.rs"));
