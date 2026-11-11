@@ -22,23 +22,21 @@ struct Record {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("cargo:rerun-if-changed=table.csv");
 
-    let mut pb = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    let mut tpb = pb.clone();
+    // Input path (table.csv lives in the crate root).
+    let input_path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("table.csv");
 
-    // Input path
-    tpb.push("table.csv");
-
-    // Output path
-    pb.push("src");
-    pb.push("table_gen.rs");
+    // The generated file must go into Cargo's OUT_DIR rather than
+    // the source tree since docs.rs mounts the src directory as read-only
+    let output_path = PathBuf::from(std::env::var("OUT_DIR")?).join("table_gen.rs");
 
     // Open input file
-    let inf = File::open(&tpb).map_err(|e| {
+    let inf = File::open(&input_path).map_err(|e| {
         format!("Failed to open table.csv: {e}. Make sure table.csv exists in the crate root.")
     })?;
 
     // Open output file
-    let mut f = File::create(&pb).map_err(|e| format!("Failed to create table_gen.rs: {e}"))?;
+    let mut f =
+        File::create(&output_path).map_err(|e| format!("Failed to create table_gen.rs: {e}"))?;
 
     let mut rdr = csv::Reader::from_reader(inf);
     let conv = Converter::new().to_case(Case::Pascal);

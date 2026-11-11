@@ -7,6 +7,11 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 
 ## [Unreleased]
 
+### Fixed
+
+- The build script now writes the generated `table_gen.rs` into `$OUT_DIR` instead of writing to `src/table_gen.rs`.
+  This is intended as a fix to docs.rs/multi-coded since it mounts the directory as read-only
+
 ### CI
 
 - Added a macOS build job covering aarch64-apple-darwin and x86_64-apple-darwin on the self-hosted macOS runner pool.
