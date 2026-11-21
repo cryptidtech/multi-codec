@@ -56,6 +56,17 @@ macro_rules! build_codec_enum {
             }
         }
 
+        /// Convert from the canonical string name of the multicodec to the
+        /// associated enum/value, through `TryFrom`.
+        #[allow(deprecated)]
+        impl core::str::FromStr for Codec {
+            type Err = Error;
+
+            fn from_str(s: &str) -> Result<Self, Self::Err> {
+                Self::try_from(s)
+            }
+        }
+
         /// Convert a Codec into a type that implements `AsRef<str>`
         #[allow(deprecated)]
         impl From<Codec> for &str {
