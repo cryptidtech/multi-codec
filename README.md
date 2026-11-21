@@ -287,12 +287,12 @@ cargo clippy --all-targets --all-features -- -D warnings
 
 ## Updating the Codec Table
 
-A build script generates the codec enum from `table.csv` at the crate root. The build script `build.rs` parses the CSV. It checks that all codes and names are unique. It emits `src/table_gen.rs`, which the build includes into `src/codec.rs`.
+A build script generates the codec enum from `table.csv` at the crate root. The build script `build.rs` parses the CSV. It checks that all codes and names are unique. It emits `table_gen.rs` into Cargo's build output directory (`$OUT_DIR`), which `src/codec.rs` includes. Generating into `$OUT_DIR` keeps the crate source tree writable-agnostic so it also builds on read-only checkouts such as docs.rs.
 
 To update the table:
 
 1. Replace `table.csv` with the latest version from the [official multicodec repository](https://github.com/multiformats/multicodec/blob/master/table.csv). You can also apply your local additions.
-2. Run `cargo build`. The build script regenerates `src/table_gen.rs`.
+2. Run `cargo build`. The build script regenerates the included file in the build output directory.
 3. Run `cargo test` to make sure the new codecs work.
 
 If the CSV has duplicate codes or names, the build fails. The error names the offending row.
